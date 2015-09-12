@@ -1,0 +1,2 @@
+Este Archivo es para describir como entran y slaen las cosas de cada modulo de la progra.
+Con forme se vayan agregando se deben poner pos escrito aqui
