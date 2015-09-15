@@ -1,0 +1,21 @@
+var:
+x azul
+y verde
+z amarillo
+w rojo
+p espacio
+m barrera;
+
+ini:
+m p m m
+x x  x x
+y y  y  y
+z z z z
+w w w w;
+
+fin:
+m m m w
+x x x x
+w w   w w
+y y y y
+z z z z;
