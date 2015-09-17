@@ -12,6 +12,7 @@ class Parser:
         self.posicionInicial = []
         self.posicionFinal = []
         self.variablesSistema = {'verde':'v', 'rojo':'r', 'amarillo':'a', 'azul':'A', 'espacio':'e', 'barrera':'n'}
+        self.variablesByKey =  {'v': 'verde', 'r': 'rojo', 'a':'amarillo','A':  'azul', 'e': 'espacio', 'n': 'barrera'}
         self.variablesUsuario = {'':'', '':'', '':'', '':'', '':'', '':'', '':''}
 
     def readFile(self, url):
@@ -47,7 +48,7 @@ class Parser:
     def revisarEstructura(self):
         self.texto = re.sub(r"[\n]+","\n", self.texto)
         self.texto = re.sub(r"[ ]+"," ", self.texto)
-        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+ini:[a-zA-Z\n\t ]+;[\n\t ]+fin:[a-zA-Z\n\t ]+;[\n\t ]+', self.texto, re.I)
+        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+ini:[a-zA-Z\n\t ]+;[\n\t ]+fin:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
         if matchObj:
             return ""
         else:
@@ -121,7 +122,38 @@ class Parser:
                 else:
                     self.posicionFinal[i][j] = self.variablesSistema[  self.variablesUsuario[self.posicionFinal[i][j]]]
 
+    ##se revisa que haya 4 variables de cada color, 1 del espacio, y 3 de barrera (en las posiciones iniciales y finales)
+        for variable in self.variablesSistema.values():
+            error += str(self.contarVariables(variable, 'inicial'))
+        for variable in self.variablesSistema.values():
+            error += str(self.contarVariables(variable, 'final'))
+
         return error
+
+    #cuenta cuántas veces aparece una variable en la posicion que se le indica (inicial o final)
+    def contarVariables(self, var, posicion):
+        contador = 0
+        if posicion == 'inicial':
+            for fila in self.posicionInicial:
+                for celda in fila:
+                    if celda == var:
+                        contador +=1
+        elif posicion == 'final':
+            for fila in self.posicionFinal:
+                for celda in fila:
+                    if celda == var:
+                        contador +=1
+
+        if var == "e":
+            if contador != 1:
+                return ("En posición "+ posicion +": cantidad incorrecta del elemento: 'espacio'\n")
+        if var == "n":
+            if contador != 3:
+                return ("En posición "+ posicion +": cantidad incorrecta del elemento: 'barrera'\n")
+        elif (var != "e") & (var != "n"):
+            if contador != 4:
+                return  ("En posición "+ posicion +": cantidad incorrecta del elemento: '" + self.variablesByKey[var] + "'\n")
+        return ""
 
     def getPosicionInicial(self):
         return self.posicionInicial
