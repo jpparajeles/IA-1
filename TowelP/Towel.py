@@ -1,5 +1,7 @@
 __author__ = 'luisdiegopizarro'
 from copy import deepcopy
+from TowelP.Space import *
+from TowelP.Movement import *
 '''
 A amarillo
 a azul
@@ -13,11 +15,6 @@ a a A a
 a r v A
 A v r r
 r v A v'''
-class Space:
-    def __init__(self,pRow,pColumn):
-        self.column=pColumn
-        self.row=pRow
-
 class Towel:
     def __init__(self,pMatrix):
         self.matrix=pMatrix;
@@ -35,9 +32,12 @@ class Towel:
         return col
 
     def getRotations(self):
-        for rowNum in range(0,self.rowLen):
-            self.nextMoves.append(rotateRight(deepcopy(self.matrix),rowNum))
-            self.nextMoves.append(rotateLeft(deepcopy(self.matrix),rowNum))
+        #el movimiento de la mueca vale menos
+        self.nextMoves.append(Movement(1,rotateRight(deepcopy(self.matrix),0)))
+        self.nextMoves.append(Movement(1,rotateLeft(deepcopy(self.matrix),0)))
+        for rowNum in range(1,self.rowLen):
+            self.nextMoves.append(Movement(4,rotateRight(deepcopy(self.matrix),rowNum)))
+            self.nextMoves.append(Movement(4,rotateLeft(deepcopy(self.matrix),rowNum)))
 
 
     def setEmptySpace(self):
@@ -52,16 +52,16 @@ class Towel:
         rowsCopy=deepcopy(self.matrix)#copia necesaria para no alterar el objeto original
         if(row==0):#mueve bola hacia abajo
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            self.nextMoves.append(rowsCopy)
+            self.nextMoves.append(Movement(1,rowsCopy))
         elif(row==self.rowLen-1):#mueve bola hacia arriba
             rowsCopy[row][col],rowsCopy[row-1][col]=rowsCopy[row-1][col],rowsCopy[row][col]
-            self.nextMoves.append(rowsCopy)
+            self.nextMoves.append(Movement(1,rowsCopy))
         else:#mueve la bola hacia arriba y hacia abajo
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
             rowsCopy2=deepcopy(self.matrix)#se necesita una segunda copia para no alterar la primera
             rowsCopy2[row][col],rowsCopy2[row-1][col]=rowsCopy2[row-1][col],rowsCopy2[row][col]
-            self.nextMoves.append(rowsCopy)
-            self.nextMoves.append(rowsCopy2)
+            self.nextMoves.append(Movement(1,rowsCopy))
+            self.nextMoves.append(Movement(1,rowsCopy2))
 
     def setNextMovements(self):
         self.getRotations()
@@ -85,8 +85,8 @@ def printBeauty(rows):
 
 def printAllMoves(moves):
     for x,y in enumerate(moves):
-        print("mov# "+str(x+1))
-        printBeauty(y)
+        print("mov# "+str(x+1)+" Costo"+str(y.cost))
+        printBeauty(y.mov)
 
 
 
