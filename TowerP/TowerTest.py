@@ -8,4 +8,13 @@ d=Tower(
 ['A','v','r','r'],
 ['r','v','A','v']])
 
-printAllMoves(d.nextMoves)
+
+a=Tower([['n','n','n','e'],
+['a','a','A','a'],
+['a','r','v','A'],
+['A','v','r','r'],
+['r','v','A','v']])
+
+
+print(d.isEqual(a))
+#printAllMoves(d.nextMoves)

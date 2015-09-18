@@ -24,7 +24,6 @@ class Tower:
         ###################
         self.setNextMovements()
 
-
     def getColumn(self,numCol):
         col=[]
         for x in self.matrix:
@@ -38,7 +37,6 @@ class Tower:
         for rowNum in range(1,self.rowLen):
             self.nextMoves.append(Movement(4,rotateRight(deepcopy(self.matrix),rowNum)))
             self.nextMoves.append(Movement(4,rotateLeft(deepcopy(self.matrix),rowNum)))
-
 
     def setEmptySpace(self):
         #el empty aca lo tengo como 'e' si en el txt cambia tuesta, hay q ver si me lo mandan x parametro
@@ -66,6 +64,9 @@ class Tower:
     def setNextMovements(self):
         self.getRotations()
         self.getBallMovement()
+
+    def isEqual(self,towerCompare):
+        return self.matrix==towerCompare.matrix
 
 def rotateRight(tower,pos):
     tower[pos]=tower[pos][-1:]+tower[pos][:-1]
