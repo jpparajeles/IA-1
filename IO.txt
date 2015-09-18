@@ -1,2 +1,18 @@
-Este Archivo es para describir como entran y slaen las cosas de cada modulo de la progra.
-Con forme se vayan agregando se deben poner pos escrito aqui
+Este Archivo es para describir cómo entran y salen las cosas de cada módulo de la progra.
+Con forme se vayan agregando se deben poner por escrito aquí
+
+
+
+Parser:
+Recibe: url del archivo
+Regresa: string con los errores encontrados
+Si no se encontraron errores, se puede obtener las listas de las posiciones con:
+        *test.getPosicionFinal()
+        *test.getPosicionInicial()
+
+Características que debe tener el archivo:
+*cada bloque debe tener su etiquetacorrespondiente
+*cada bloque debe terminar con '';'
+*se puede tener n cantidad de cambios de línea a lo largo del texto, pero no caracteres fuera de los bloques
+*los nombres de los colores deben ser todos en minísucla
+*solo se aceptan letras (mayúsculas y minúsculas) para los nombres de las variables
