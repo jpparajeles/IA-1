@@ -17,4 +17,4 @@ a=Tower([['n','n','n','e'],
 
 
 print(d.isEqual(a))
-#printAllMoves(d.nextMoves)
+printAllMoves(d.getNextMovements())
