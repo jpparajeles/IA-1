@@ -30,11 +30,11 @@ class Tower:
 
     def getRotations(self,pMoves):
         #el movimiento de la mueca vale menos
-        pMoves.append(Movement(1,Tower(rotateRight(deepcopy(self.matrix),0))))
-        pMoves.append(Movement(1,Tower(rotateLeft(deepcopy(self.matrix),0))))
+        pMoves.append(Movement(1,Tower(rotateRight(deepcopy(self.matrix),0)),'Mover Muesca Derecha',4,0))
+        pMoves.append(Movement(1,Tower(rotateLeft(deepcopy(self.matrix),0)),'Mover Muesca Izquierda',3,0))
         for rowNum in range(1,self.rowLen):
-            pMoves.append(Movement(4,Tower(rotateRight(deepcopy(self.matrix),rowNum))))
-            pMoves.append(Movement(4,Tower(rotateLeft(deepcopy(self.matrix),rowNum))))
+            pMoves.append(Movement(4,Tower(rotateRight(deepcopy(self.matrix),rowNum)),'Mover Fila '+str(rowNum)+" Derecha",4,rowNum))
+            pMoves.append(Movement(4,Tower(rotateLeft(deepcopy(self.matrix),rowNum)),'Mover Fila '+str(rowNum)+" Izquierda",3,rowNum))
 
     def setEmptySpace(self):
         #el empty aca lo tengo como 'e' si en el txt cambia tuesta, hay q ver si me lo mandan x parametro
@@ -48,16 +48,16 @@ class Tower:
         rowsCopy=deepcopy(self.matrix)#copia necesaria para no alterar el objeto original
         if(row==0):#mueve bola hacia abajo
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy)))
+            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia abajo',2,col))
         elif(row==self.rowLen-1):#mueve bola hacia arriba
             rowsCopy[row][col],rowsCopy[row-1][col]=rowsCopy[row-1][col],rowsCopy[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy)))
+            pMoves.append(Movement(1,Tower(rowsCopy,'Mover bola hacia abajo',1,col)))
         else:#mueve la bola hacia arriba y hacia abajo
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
             rowsCopy2=deepcopy(self.matrix)#se necesita una segunda copia para no alterar la primera
             rowsCopy2[row][col],rowsCopy2[row-1][col]=rowsCopy2[row-1][col],rowsCopy2[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy)))
-            pMoves.append(Movement(1,Tower(rowsCopy2)))
+            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia abajo',2,col))
+            pMoves.append(Movement(1,Tower(rowsCopy2),'Mover bola hacia abajo',1,col))
 
     def getNextMovements(self):
         moves=[]
@@ -86,7 +86,7 @@ def printBeauty(rows):
 
 def printAllMoves(moves):
     for x,y in enumerate(moves):
-        print("mov# "+str(x+1)+" Costo"+str(y.cost))
+        print("mov# "+str(x+1)+" Costo"+str(y.cost)+" "+y.description+" "+str(y.direction)+" "+str(y.position))
         printBeauty(y.tower.matrix)
 
 
