@@ -11,8 +11,20 @@ Si no se encontraron errores, se puede obtener las listas de las posiciones con:
         *test.getPosicionInicial()
 
 Características que debe tener el archivo:
-*cada bloque debe tener su etiquetacorrespondiente
+*cada bloque debe tener su etiqueta correspondiente
 *cada bloque debe terminar con '';'
 *se puede tener n cantidad de cambios de línea a lo largo del texto, pero no caracteres fuera de los bloques
 *los nombres de los colores deben ser todos en minísucla
 *solo se aceptan letras (mayúsculas y minúsculas) para los nombres de las variables
+
+------------------Corrección en el parser--------------------------
+para cumplir con el enunciado de la progra que dice:
+"pues se exigirá también que ya sea la configuración inicial o la meta, o ambas, puedan ser dadas mediante un archivo tipo txt"
+
+La forma en la que se instancia el Parser sigue igual (para no afectar módulos que puedan estar asociados al Parser)
+Lo que cambió: el Parser por si mismo revisa que si se ingresaron las dos configuraciones o solo una, y cual.
+Para saber si el usuario ingresó la confi inicial y/o final, se tienen estos metodos:
+        --> getHayConfigInicial()
+        --> gethayConfigFinal()
+------------------Corrección en el parser--------------------------
+

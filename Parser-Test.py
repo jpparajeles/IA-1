@@ -10,6 +10,10 @@ msg = test.parsear();
 if (msg == ''):
     print('Sin errores\n')
 else:
-    print (msg)
-print("Posicion Inicial:\n",test.getPosicionFinal())
-print("Posicion final:\n",test.getPosicionInicial())
+    print (msg+ "\n")
+
+print("¿El archivo de texto incluye la configuración inicial? " + str(test.getHayConfigInicial()))
+print("¿El archivo de texto incluye la configuración final? " + str(test.getHayConfigFinal()))
+
+print("\nPosicion Inicial:\n",test.getPosicionInicial())
+print("Posicion final:\n",test.getPosicionFinal())

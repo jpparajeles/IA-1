@@ -14,6 +14,9 @@ class Parser:
         self.variablesSistema = {'verde':'v', 'rojo':'r', 'amarillo':'a', 'azul':'A', 'espacio':'e', 'barrera':'n'}
         self.variablesByKey =  {'v': 'verde', 'r': 'rojo', 'a':'amarillo','A':  'azul', 'e': 'espacio', 'n': 'barrera'}
         self.variablesUsuario = {'':'', '':'', '':'', '':'', '':'', '':'', '':''}
+        self.hayConfigInicial = False
+        self.hayConfigFinal = False
+
 
     def readFile(self, url):
         if url == "":
@@ -25,6 +28,11 @@ class Parser:
         return textoLeido
 
 
+    def getHayConfigInicial(self):
+        return self.hayConfigInicial
+
+    def getHayConfigFinal(self):
+        return self.hayConfigFinal
 
 
     """ revisarEstructura
@@ -45,14 +53,24 @@ class Parser:
 
     con una expresion regular
     """
-    def revisarEstructura(self):
+    def revisarEstructura(self): #revisa si se ingreso las dos configuraciones (inicial y final) o solo una de ellas (e indica cuál)
         self.texto = re.sub(r"[\n]+","\n", self.texto)
         self.texto = re.sub(r"[ ]+"," ", self.texto)
         matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+ini:[a-zA-Z\n\t ]+;[\n\t ]+fin:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
         if matchObj:
+            self.hayConfigInicial = True
+            self.hayConfigFinal = True
+            return ""
+        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+ini:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
+        if matchObj:
+            self.hayConfigInicial = True
+            return ""
+        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+fin:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
+        if matchObj:
+            self.hayConfigFinal = True
             return ""
         else:
-            return "La estructura general tiene error(es). Recuerde colocar las etiquetas y cerrar con ';' cada bloque."
+            return "La estructura general tiene error(es). Recuerde colocar las etiquetas y cerrar con ';' cada bloque. \nSin alguno de estos elementos, no se puede identificar cada una de las partes del archivo"
 
 
 
@@ -84,49 +102,80 @@ class Parser:
 
         return mensajeError
 
+    ##se revisa que las posiciones sean matrices de 5x5
+    def revisarMatricesPosiciones(self, matriz):
+        matrizRev = []
+        error = ''
+        if matriz == 'inicial':
+            matrizRev = self.posicionInicial
+        if matriz == 'final':
+            matrizRev = self.posicionFinal
 
+        if (len(matrizRev)==5):
+            for elemento in matrizRev:
+                if ((len(elemento) != 4) | ('' in elemento)):
+                    error = "Error en la matriz de posición " + matriz + ". Revise la cantidad de filas y de elementos en cada una de ellas.\n"
+                    break
+        else:
+            error = "Error en la matriz de posición " + matriz + ". Revise la cantidad de filas y de elementos en cada una de ellas.\n"
+        return error
+
+    def sustituirVariables(self, posicion):
+        matrizRev = []
+        error = ''
+        if posicion == 'inicial':
+            matrizRev = self.posicionInicial ##como Python pasa la referencia, al final no es necesario asignar el valor de matrizRev a self.posicionInicial
+        if posicion == 'final':
+            matrizRev = self.posicionFinal
+
+
+        for i in range(0, len(matrizRev)):
+            for j in range(0, len(matrizRev[i])):
+                if (matrizRev[i][j] not in self.variablesUsuario.keys()):
+                    error += "Uso de la variable '" + matrizRev[i][j] + "' no definida por el usuario.\n"
+                else:
+                    matrizRev[i][j] = self.variablesSistema[  self.variablesUsuario[matrizRev[i][j]]]
+
+        return error
 
     #antes de ejecutar este texto se debe haber asegurado de que el archivo de texto está bien construido
     #si no se hace, fallarán las expresiones regulares
     def setPosiciones(self):
-        iniMatch = re.search(r'ini:[a-zA-Z\n\t ]+;', self.texto)
-        inicio = self.texto[iniMatch.start()+5:iniMatch.end()-1]
-        self.posicionInicial = [ re.split(r' ', x, maxsplit=3) for x in re.split(r'\n', inicio) ]
+        if self.hayConfigInicial:
+            iniMatch = re.search(r'ini:[a-zA-Z\n\t ]+;', self.texto)
+            inicio = self.texto[iniMatch.start()+5:iniMatch.end()-1]
+            self.posicionInicial = [ re.split(r' ', x, maxsplit=3) for x in re.split(r'\n', inicio) ]
 
-        finMatch = re.search(r'fin:[a-zA-Z\n\t ]+;', self.texto)
-        final = self.texto[finMatch.start()+5:finMatch.end()-1]
-        self.posicionFinal = [ re.split(r' ', x, maxsplit=3) for x in re.split(r'\n', final)]
+        if self.hayConfigFinal:
+            finMatch = re.search(r'fin:[a-zA-Z\n\t ]+;', self.texto)
+            final = self.texto[finMatch.start()+5:finMatch.end()-1]
+            self.posicionFinal = [ re.split(r' ', x, maxsplit=3) for x in re.split(r'\n', final)]
 
-        ##se revisa que las posciiones sean matrices de 5x5
-        if (len(self.posicionInicial)==5):
-            for elemento in self.posicionInicial:
-              if ((len(elemento) != 4) | ('' in elemento)):
-                  return "Error en la matriz de posiciones iniciales"
-        else:
-            return "Error en la matriz de posiciones iniciales"
-
+        ##se revisa que las posiciones sean matrices de 5x5
+        if self.hayConfigInicial:
+            msg = self.revisarMatricesPosiciones('inicial')
+            if msg != '':
+                return msg
+        if self.hayConfigFinal:
+            msg = self.revisarMatricesPosiciones('final')
+            if msg != '':
+                return msg
         #se sustituyen las variables del usuario por sus equivalentes en las variables del sistema
         #se revisa que cada una de las variables haya sido definida por el usuario
         error = ''
-        for i in range(0, len(self.posicionInicial)):
-            for j in range(0, len(self.posicionInicial[i])):
-                if (self.posicionInicial[i][j] not in self.variablesUsuario.keys()):
-                    error += "Uso de la variable '" + self.posicionInicial[i][j] + "' no definida por el usuario.\n"
-                else:
-                    self.posicionInicial[i][j] = self.variablesSistema[  self.variablesUsuario[self.posicionInicial[i][j]]]
+        if self.hayConfigInicial:
+            error += self.sustituirVariables('inicial')
+        if self.hayConfigFinal:
+            error += self.sustituirVariables('final')
 
-        for i in range(0, len(self.posicionFinal)):
-            for j in range(0, len(self.posicionFinal[i])):
-                if (self.posicionFinal[i][j] not in self.variablesUsuario.keys()):
-                    error += "Uso de la variable '" + self.posicionFinal[i][j] + "' no definida por el usuario.\n"
-                else:
-                    self.posicionFinal[i][j] = self.variablesSistema[  self.variablesUsuario[self.posicionFinal[i][j]]]
 
     ##se revisa que haya 4 variables de cada color, 1 del espacio, y 3 de barrera (en las posiciones iniciales y finales)
-        for variable in self.variablesSistema.values():
-            error += str(self.contarVariables(variable, 'inicial'))
-        for variable in self.variablesSistema.values():
-            error += str(self.contarVariables(variable, 'final'))
+        if self.hayConfigInicial:
+            for variable in self.variablesSistema.values():
+                error += str(self.contarVariables(variable, 'inicial'))
+        if self.hayConfigFinal:
+            for variable in self.variablesSistema.values():
+                error += str(self.contarVariables(variable, 'final'))
 
         return error
 
