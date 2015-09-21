@@ -20,9 +20,6 @@ class Tower:
         self.matrix=pMatrix;
         self.emptySpace=self.setEmptySpace()
         self.rowLen=len(pMatrix)
-        self.nextMoves=[]
-        ###################
-        self.setNextMovements()
 
 
     def getColumn(self,numCol):
@@ -31,14 +28,13 @@ class Tower:
             col.append(x[numCol])
         return col
 
-    def getRotations(self):
+    def getRotations(self,pMoves):
         #el movimiento de la mueca vale menos
-        self.nextMoves.append(Movement(1,rotateRight(deepcopy(self.matrix),0)))
-        self.nextMoves.append(Movement(1,rotateLeft(deepcopy(self.matrix),0)))
+        pMoves.append(Movement(1,Tower(rotateRight(deepcopy(self.matrix),0))))
+        pMoves.append(Movement(1,Tower(rotateLeft(deepcopy(self.matrix),0))))
         for rowNum in range(1,self.rowLen):
-            self.nextMoves.append(Movement(4,rotateRight(deepcopy(self.matrix),rowNum)))
-            self.nextMoves.append(Movement(4,rotateLeft(deepcopy(self.matrix),rowNum)))
-
+            pMoves.append(Movement(4,Tower(rotateRight(deepcopy(self.matrix),rowNum))))
+            pMoves.append(Movement(4,Tower(rotateLeft(deepcopy(self.matrix),rowNum))))
 
     def setEmptySpace(self):
         #el empty aca lo tengo como 'e' si en el txt cambia tuesta, hay q ver si me lo mandan x parametro
@@ -46,26 +42,31 @@ class Tower:
             if('e' in row):
                return Space(rowNum,row.index('e'))#[fila,columna]
 
-    def getBallMovement(self):
+    def getBallMovement(self,pMoves):
         col=self.emptySpace.column
         row=self.emptySpace.row
         rowsCopy=deepcopy(self.matrix)#copia necesaria para no alterar el objeto original
         if(row==0):#mueve bola hacia abajo
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            self.nextMoves.append(Movement(1,rowsCopy))
+            pMoves.append(Movement(1,Tower(rowsCopy)))
         elif(row==self.rowLen-1):#mueve bola hacia arriba
             rowsCopy[row][col],rowsCopy[row-1][col]=rowsCopy[row-1][col],rowsCopy[row][col]
-            self.nextMoves.append(Movement(1,rowsCopy))
+            pMoves.append(Movement(1,Tower(rowsCopy)))
         else:#mueve la bola hacia arriba y hacia abajo
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
             rowsCopy2=deepcopy(self.matrix)#se necesita una segunda copia para no alterar la primera
             rowsCopy2[row][col],rowsCopy2[row-1][col]=rowsCopy2[row-1][col],rowsCopy2[row][col]
-            self.nextMoves.append(Movement(1,rowsCopy))
-            self.nextMoves.append(Movement(1,rowsCopy2))
+            pMoves.append(Movement(1,Tower(rowsCopy)))
+            pMoves.append(Movement(1,Tower(rowsCopy2)))
 
-    def setNextMovements(self):
-        self.getRotations()
-        self.getBallMovement()
+    def getNextMovements(self):
+        moves=[]
+        self.getRotations(moves)
+        self.getBallMovement(moves)
+        return moves
+
+    def isEqual(self,towerCompare):
+        return self.matrix==towerCompare.matrix
 
 def rotateRight(tower,pos):
     tower[pos]=tower[pos][-1:]+tower[pos][:-1]
@@ -86,7 +87,7 @@ def printBeauty(rows):
 def printAllMoves(moves):
     for x,y in enumerate(moves):
         print("mov# "+str(x+1)+" Costo"+str(y.cost))
-        printBeauty(y.mov)
+        printBeauty(y.tower.matrix)
 
 
 
