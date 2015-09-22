@@ -68,7 +68,7 @@ def findEq(nodo, list):
     :type nodo: AEstrella.Nodo.Nodo
     """
     for elem in list:
-        if elem.Modelo == nodo.Modelo:
+        if elem.Modelo.matrix == nodo.Modelo.matrix:
             return elem
     return False
 
