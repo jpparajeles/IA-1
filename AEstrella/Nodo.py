@@ -1,8 +1,11 @@
+from AEstrella.tools import Point
+
 __author__ = 'JP'
 
 class Nodo:
-    def __init__(self, pModelo, pPadre, pG, pH):
-        """Inicia el nodo"""
+    def __init__(self, pModelo, pPadre, pG, pH=-1):
+        """Inicia el nodo
+        """
         self.Modelo = pModelo
         self.Padre = pPadre
         self.G = pG
@@ -12,7 +15,17 @@ class Nodo:
         return self.G + self.H
 
     def igual(self, pModelo):
-        return self.Modelo == pModelo
+        return self.Modelo.matrix[1:] == pModelo.Modelo.matrix[1:]
+
+    def toDict(self):
+        ret = dict()
+        for i, row in enumerate(self.Modelo.matrix):
+            for j, elem in enumerate(row):
+                if elem not in ret.keys():
+                    ret[elem]=[Point(i,j)]
+                else:
+                    ret[elem].append(Point(i,j))
+        return ret
 
 """
     def __lt__(self, other):
