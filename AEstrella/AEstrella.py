@@ -28,7 +28,7 @@ def h(actual, meta):
     for key in meta.keys():
         if key == N or key == E:
             continue
-        acc += Cross(actual[key], actual[key])
+        acc += Cross(actual[key], meta[key])
     return acc
 
 
@@ -57,21 +57,24 @@ def estrella(inicial, final):
     while abiertos:
 
         min_f = min(abiertos, key=lambda x: x.f())
-        print(min_f.f())
+        #print(min_f.f())
         #printBeauty(min_f.Modelo.matrix)
         #print()
         abiertos.remove(min_f)
         for sucesor in sucesores(min_f, final_d):
 
             if(sucesor.igual(final)):
+                print(len(abiertos))
+                print(len(cerrados))
                 return sucesor
-            abierto=findEq(sucesor, abiertos)
-            if(abierto and abierto.f() < sucesor.f()):
-                #print("abierto menor")
-                continue
             cerrado=findEq(sucesor,cerrados)
-            if(cerrado and cerrado.f() < sucesor.f()):
-                #print("cerrado menor")
+            if(cerrado):
+                continue
+            abierto=findEq(sucesor, abiertos)
+            if(abierto):
+                if abierto.f() > sucesor.f():
+                    abiertos.remove(abierto)
+                    abiertos.append(sucesor)
                 continue
             abiertos.append(sucesor)
         cerrados.append(min_f)
