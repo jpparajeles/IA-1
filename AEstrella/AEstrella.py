@@ -4,6 +4,7 @@ N = "n"
 
 from AEstrella.Nodo import *
 from TowerP.Tower import printBeauty
+import timeit
 
 def busqueda(ModeloI, ModeloF):
     return estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
@@ -49,18 +50,21 @@ def sucesores(inicial, modelo_d):
 
 
 def estrella(inicial, final):
-    abiertos = []
-    cerrados = []
+    abiertos = set()
+    cerrados = set()
     final_d = final.toDict()
     inicial.h = h(inicial.toDict(),final_d)
-    abiertos.append(inicial)
+    abiertos.add(inicial)
     while abiertos:
-
+        #start = timeit.default_timer()
         min_f = min(abiertos, key=lambda x: x.f())
+        #stop = timeit.default_timer()
+        #print (stop - start)
         #print(min_f.f())
         #printBeauty(min_f.Modelo.matrix)
         #print()
         abiertos.remove(min_f)
+        cerrados.add(min_f)
         for sucesor in sucesores(min_f, final_d):
 
             if(sucesor.igual(final)):
@@ -74,10 +78,9 @@ def estrella(inicial, final):
             if(abierto):
                 if abierto.f() > sucesor.f():
                     abiertos.remove(abierto)
-                    abiertos.append(sucesor)
+                    abiertos.add(sucesor)
                 continue
-            abiertos.append(sucesor)
-        cerrados.append(min_f)
+            abiertos.add(sucesor)
 
 
 
