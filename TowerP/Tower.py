@@ -46,18 +46,21 @@ class Tower:
         col=self.emptySpace.column
         row=self.emptySpace.row
         rowsCopy=deepcopy(self.matrix)#copia necesaria para no alterar el objeto original
-        if(row==0):#mueve bola hacia abajo
+        if(row==0):#mueve bola hacia abajo(xq esta arriba el hueco)
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia abajo',2,col))
-        elif(row==self.rowLen-1):#mueve bola hacia arriba
-            rowsCopy[row][col],rowsCopy[row-1][col]=rowsCopy[row-1][col],rowsCopy[row][col]
             pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia arriba',1,col))
-        else:#mueve la bola hacia arriba y hacia abajo
-            rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            rowsCopy2=deepcopy(self.matrix)#se necesita una segunda copia para no alterar la primera
-            rowsCopy2[row][col],rowsCopy2[row-1][col]=rowsCopy2[row-1][col],rowsCopy2[row][col]
+        elif(row==self.rowLen-1):#mueve bola hacia arriba(xq esta abajo e hueco)
+            rowsCopy[row][col],rowsCopy[row-1][col]=rowsCopy[row-1][col],rowsCopy[row][col]
             pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia abajo',2,col))
-            pMoves.append(Movement(1,Tower(rowsCopy2),'Mover bola hacia arriba',1,col))
+        else:#mueve la bola hacia arriba y hacia abajo
+
+            rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
+            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia arriba',1,col))
+
+            if(rowsCopy[row-1][col]!='n'):# si el vacio esta debajo de la muesca
+                rowsCopy2=deepcopy(self.matrix)#se necesita una segunda copia para no alterar la primera
+                rowsCopy2[row][col],rowsCopy2[row-1][col]=rowsCopy2[row-1][col],rowsCopy2[row][col]
+                pMoves.append(Movement(1,Tower(rowsCopy2),'Mover bola hacia abajo',2,col))
 
     def getNextMovements(self):
         moves=[]
