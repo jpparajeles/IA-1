@@ -16,30 +16,23 @@ final=Tower(
 ['a','v','A','r'],
 ['a','v','A','r']])
 
-easy=Tower( #390s
+easy=Tower( #784s
 [['n','n','n','r'],
 ['a','a','v','e'],
 ['r','v','A','A'],
 ['a','v','A','r'],
 ['a','v','A','r']])
 
-test = Tower( #2.4s
+test = Tower( #3s
 [['n','n','n','e'],
 ['a','v','r','A'],
 ['a','v','A','r'],
 ['a','v','A','r'],
 ['a','v','A','r']])
 
-bio = Tower( #2.4s
-[['n','n','n','e'],
-['a','v','r','A'],
-['v','A','r','a'],
-['a','v','A','r'],
-['a','r','A','v']])
-
-
+print("hola")
 start = timeit.default_timer()
-result = busqueda(bio,final)
+result = busqueda(easy,final)
 print("Resultado")
 print(result.f())
 printBeauty(result.Modelo.matrix)
