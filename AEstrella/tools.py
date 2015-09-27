@@ -13,6 +13,6 @@ class Point:
         if x == 3:
             x = 1
         y = abs(self.Y-other.Y)
-        return x*+y
+        return x+y
 
 

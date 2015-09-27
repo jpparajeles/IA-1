@@ -1,9 +1,12 @@
+import timeit
+
 __author__ = 'JP'
 E = "e"
 N = "n"
 
 from AEstrella.Nodo import *
 from TowerP.Tower import printBeauty
+from AEstrella.TriList import TriList
 
 def busqueda(ModeloI, ModeloF):
     return estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
@@ -49,43 +52,32 @@ def sucesores(inicial, modelo_d):
 
 
 def estrella(inicial, final):
-    abiertos = []
-    cerrados = []
+    abiertos = TriList()
+    cerrados = TriList()
     final_d = final.toDict()
-    inicial.h = h(inicial.toDict(),final_d)
-    abiertos.append(inicial)
+    inicial.H = h(inicial.toDict(),final_d)
+    abiertos.add(inicial)
     while abiertos:
-
-        min_f = min(abiertos, key=lambda x: x.f())
-        print(min_f.f())
-        printBeauty(min_f.Modelo.matrix)
-        print()
-        abiertos.remove(min_f)
+        #start = timeit.default_timer()
+        min_f = abiertos.pop_min()
+        #stop = timeit.default_timer()
+        #print (stop - start)
+        print(min_f.H, min_f.G)
+        #printBeauty(min_f.Modelo.matrix)
+        #print()
+        cerrados.add(min_f)
         for sucesor in sucesores(min_f, final_d):
-
             if(sucesor.igual(final)):
                 print(len(abiertos))
                 print(len(cerrados))
                 return sucesor
-            cerrado=findEq(sucesor,cerrados)
-            if(cerrado):
+            if(cerrados.find(sucesor)):
                 continue
-            abierto=findEq(sucesor, abiertos)
+            abierto=abiertos.find(sucesor)
             if(abierto):
                 if abierto.f() > sucesor.f():
                     abiertos.remove(abierto)
-                    abiertos.append(sucesor)
+                    abiertos.add(sucesor)
                 continue
-            abiertos.append(sucesor)
-        cerrados.append(min_f)
-
-
-
-
-
-
-
-
-
-
-
+            abiertos.add(sucesor)
+#estrella end
