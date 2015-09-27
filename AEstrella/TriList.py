@@ -65,3 +65,65 @@ class TriList:
         return acc
 
 
+class PentaList:
+    def __init__(self):
+        self.main = dict()
+
+    def add(self, nodo):
+        """
+        :type nodo: AEstrella.Nodo.Nodo
+        """
+
+        keys = self.keyMaker(nodo.Modelo.matrix)
+        if keys[0] not in self.main.keys():
+            self.main[keys[0]]={keys[1]:{keys[2]:{keys[3]:{keys[4]:nodo}}}}
+        elif keys[1] not in self.main[keys[0]].keys():
+            self.main[keys[0]][keys[1]]={keys[2]:{keys[3]:{keys[4]:nodo}}}
+        elif keys[2] not in self.main[keys[0]][keys[1]].keys():
+            self.main[keys[0]][keys[1]][keys[2]]={keys[3]:{keys[4]:nodo}}
+        elif keys[3] not in self.main[keys[0]][keys[1]][keys[2]].keys():
+            self.main[keys[0]][keys[1]][keys[2]][keys[3]]= {keys[4]:nodo}
+        else:
+            self.main[keys[0]][keys[1]][keys[2]][keys[3]][keys[4]]=nodo
+
+    def keyMaker(self,matrix):
+        keys = list(map(lambda x: "".join(x),matrix))
+        return keys
+
+    def remove(self, nodo):
+        """
+        :type nodo: AEstrella.Nodo.Nodo
+        """
+
+        keys = self.keyMaker(nodo.Modelo.matrix)
+        del self.main[keys[0]][keys[1]][keys[2]][keys[3]][keys[4]]
+        if len(self.main[keys[0]][keys[1]][keys[2]][keys[3]])==0:
+            del self.main[keys[0]][keys[1]][keys[2]][keys[3]]
+        if len(self.main[keys[0]][keys[1]][keys[2]])==0:
+            del self.main[keys[0]][keys[1]][keys[2]]
+        if len(self.main[keys[0]][keys[1]]) == 0:
+            del self.main[keys[0]][keys[1]]
+        if len(self.main[keys[0]]) == 0:
+            del self.main[keys[0]]
+
+    def find(self, nodo):
+        """
+        :type nodo: AEstrella.Nodo.Nodo
+        """
+        keys = self.keyMaker(nodo.Modelo.matrix)
+        if keys[0] not in self.main.keys():
+            return False
+        elif keys[1] not in self.main[keys[0]].keys():
+            return False
+        elif keys[2] not in self.main[keys[0]][keys[1]].keys():
+            return False
+        elif keys[3] not in self.main[keys[0]][keys[1]][keys[2]].keys():
+            return False
+        elif keys[4] not in self.main[keys[0]][keys[1]][keys[2]][keys[3]].keys():
+            return False
+        else:
+            return self.main[keys[0]][keys[1]][keys[2]][keys[3]][keys[4]]
+
+
+
+

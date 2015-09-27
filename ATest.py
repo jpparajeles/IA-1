@@ -17,7 +17,7 @@ final=Tower(
 ['a','v','A','r'],
 ['a','v','A','r']])
 
-easy=Tower( #1s
+easy=Tower( #0.5s
 [['n','n','n','r'],
 ['a','a','v','e'],
 ['r','v','A','A'],
@@ -31,7 +31,7 @@ test = Tower( #0.4s
 ['a','v','A','r'],
 ['a','v','A','r']])
 
-test2 = Tower( #1s
+test2 = Tower( #0.7s
 [['n','n','n','e'],
 ['a','v','A','r'],
 ['a','v','r','A'],
