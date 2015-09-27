@@ -6,7 +6,7 @@ from AEstrella.Nodo import *
 from TowerP.Tower import printBeauty
 
 def busqueda(ModeloI, ModeloF):
-    estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
+    return estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
 
 
 def Cross(init, end):
@@ -28,7 +28,7 @@ def h(actual, meta):
     for key in meta.keys():
         if key == N or key == E:
             continue
-        acc += Cross(actual[key], actual[key])
+        acc += Cross(actual[key], meta[key])
     return acc
 
 
@@ -52,21 +52,29 @@ def estrella(inicial, final):
     abiertos = []
     cerrados = []
     final_d = final.toDict()
+    inicial.h = h(inicial.toDict(),final_d)
     abiertos.append(inicial)
     while abiertos:
-        print(cerrados)
+
         min_f = min(abiertos, key=lambda x: x.f())
+        print(min_f.f())
+        printBeauty(min_f.Modelo.matrix)
+        print()
         abiertos.remove(min_f)
         for sucesor in sucesores(min_f, final_d):
-            printBeauty(sucesor.Modelo.matrix)
-            print()
+
             if(sucesor.igual(final)):
+                print(len(abiertos))
+                print(len(cerrados))
                 return sucesor
-            abierto=findEq(sucesor, abiertos)
-            if(abierto and abierto.f() < sucesor.f()):
-                continue
             cerrado=findEq(sucesor,cerrados)
-            if(cerrado and cerrado.f() < sucesor.f()):
+            if(cerrado):
+                continue
+            abierto=findEq(sucesor, abiertos)
+            if(abierto):
+                if abierto.f() > sucesor.f():
+                    abiertos.remove(abierto)
+                    abiertos.append(sucesor)
                 continue
             abiertos.append(sucesor)
         cerrados.append(min_f)
