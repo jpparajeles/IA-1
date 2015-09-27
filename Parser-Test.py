@@ -4,17 +4,24 @@ __author__ = 'ia'
 from Parser import *
 
 
-##TEST: muestra de como deben ser ejecutado el Parser
-#test = Parser("/home/ia/Projects/IA-1/prueba1");
-test = Parser("prueba1");
-msg = test.parsear();
-if (msg == ''):
-    print('Sin errores\n')
-else:
-    print (msg+ "\n")
+test = Parser();
 
-print("¿El archivo de texto incluye la configuración inicial? " + str(test.getHayConfigInicial()))
-print("¿El archivo de texto incluye la configuración final? " + str(test.getHayConfigFinal()))
+#el primer parametro indica si es la configuracion inicial o la final, el segundo es el archivo de texto
+msg1 = test.parsear('inicial', 'prueba1')
+msg2 = test.parsear('final', 'prueba2')
+
+
+if (msg1 == ''):
+    print('Sin errores en config inicial\n')
+else:
+    print ("Errores en config inicial: \n",msg1)
+
+if (msg2 == ''):
+    print('Sin errores en config final\n')
+else:
+    print ("Errores en config final: \n",msg2)
+
+
 
 print("\nPosicion Inicial:\n",test.getPosicionInicial())
 print("Posicion final:\n",test.getPosicionFinal())

@@ -1,31 +1,46 @@
 __author__ = 'ia'
 import re
 import copy
-
+from operator import itemgetter
 import sys
 
+"""
+fila(#, {azul, azul, azul, color})
+
+muesca(#col)
+
+"""
+
 class Parser:
-    def __init__(self, url):
-        self.archivo = url
+    def __init__(self):
+
         self.tabla = []
-        self.texto = self.readFile(url)
+        self.texto = ''
         self.posicionInicial = []
         self.posicionFinal = []
-        self.variablesSistema = {'verde':'v', 'rojo':'r', 'amarillo':'a', 'azul':'A', 'espacio':'e', 'barrera':'n'}
-        self.variablesByKey =  {'v': 'verde', 'r': 'rojo', 'a':'amarillo','A':  'azul', 'e': 'espacio', 'n': 'barrera'}
-        self.variablesUsuario = {'':'', '':'', '':'', '':'', '':'', '':'', '':''}
-        self.hayConfigInicial = False
-        self.hayConfigFinal = False
+        self.posiciontemp = []
+        self.posicionLista = self.inicializarLista()
+        self.variablesSistema = {'verde':'v', 'rojo':'r', 'amarillo':'a', 'azul':'A'}
 
+
+    def inicializarLista(self):
+        lista = []
+        for i in range (0,5):
+            temp = []
+            for j in range(0,4):
+                temp.append('n')
+            lista.append(temp)
+
+        return lista
 
     def readFile(self, url):
         if url == "":
             return
         f = open(url)
 
-        textoLeido = f.read()
+        self.texto = f.read()
         f.close()
-        return textoLeido
+        return
 
 
     def getHayConfigInicial(self):
@@ -35,174 +50,100 @@ class Parser:
         return self.hayConfigFinal
 
 
-    """ revisarEstructura
-        revisara que venga:
-    var:
-    w color1
-    x color2
-    y color3
-    z color4
-    e espacio
-    n barrera
 
-    inicial:
-    n e e e (etc)
 
-    final:
-    n e e e (etc)
-
-    con una expresion regular
-    """
     def revisarEstructura(self): #revisa si se ingreso las dos configuraciones (inicial y final) o solo una de ellas (e indica cuál)
-        self.texto = re.sub(r"[\n]+","\n", self.texto)
-        self.texto = re.sub(r"[ ]+"," ", self.texto)
-        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+ini:[a-zA-Z\n\t ]+;[\n\t ]+fin:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
+        self.texto = re.sub(r"[\n]+","\n", self.texto) #quita line breaks extra
+        self.texto = re.sub(r"[ ]+","", self.texto)  #quita los espacios extra
+        print(self.texto)
+        matchObj = re.match( r'^(\w+=\w+\n*|M[1-9]\n*|\n)*$', self.texto, re.U)
+        self.separarTexto()
         if matchObj:
-            self.hayConfigInicial = True
-            self.hayConfigFinal = True
-            return ""
-        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+ini:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
-        if matchObj:
-            self.hayConfigInicial = True
-            return ""
-        matchObj = re.match( r'var:[a-zA-Z\n\t ]+;[\n\t ]+fin:[a-zA-Z\n\t ]+;[\n\t ]+$', self.texto, re.I)
-        if matchObj:
-            self.hayConfigFinal = True
             return ""
         else:
-            return "La estructura general tiene error(es). Recuerde colocar las etiquetas y cerrar con ';' cada bloque. \nSin alguno de estos elementos, no se puede identificar cada una de las partes del archivo"
+            return "Error en la estructura general."
 
 
+    def separarTexto(self):
+        listaPosiciones = [ re.split(r'=', x, maxsplit=2) for x in re.split(r'\n', self.texto) ]
+        if listaPosiciones.count(['']) > 0:
+            listaPosiciones.remove([''])
+        for elemento in listaPosiciones:
+            temp = elemento[0]
+            matchObj = re.match( r'F[1-5]C[1-4]|C[1-4]F[1-5]$', temp)
 
+            if len(temp) > 2:
+                elemento[0] = [ temp[:2], temp[2:]  ]
+            else:
+                elemento[0] = [temp]
 
+            if len(elemento[0])>1: #para que no intente ordenar donde esta la muesca, porque en ese caso falla el sort
+                elemento[0].sort(key=itemgetter(0))  #lo ordeno para que siempre quede primero las columnas, aunque en el txt hayan entrado al reves
 
-    def montarVariables(self):
-        mensajeError = ""
-        varsMatch = re.search(r'var:[a-zA-Z\n\t ]+;', self.texto)
-        vars = self.texto[varsMatch.start()+5:varsMatch.end()-1]
-        listaVar = [ re.split(r' ', x, maxsplit=2) for x in re.split(r'\n', vars) ]
-
-        listaVarCopia = copy.deepcopy(listaVar)
-
-        for x in range(0, len( listaVarCopia)):
-            temp = listaVarCopia[x][0]
-            if (temp in [elemento[0] for elemento in listaVarCopia[x+1:]]):
-                mensajeError += "No se puede dar dos declaraciones a la  variable: '"+ temp + "' \n"
-
-        self.variablesUsuario = {key: value for (key, value) in listaVar}
-
-        for element in self.variablesUsuario:
-            if (self.variablesUsuario[element] not in  self.variablesSistema.keys()):
-                mensajeError += "Uso de palabra no existente en el lenguaje: " + self.variablesUsuario[element] + "\n"
-
-        if (len(self.variablesUsuario) < 6):
-            mensajeError += "Error en la definición de variables. Falta declarar variables"
-        elif (len(self.variablesUsuario) > 6):
-            mensajeError += "Error en la definición de variables. Se declaró más variable(s) de las necesarias."
-
-        return mensajeError
-
-    ##se revisa que las posiciones sean matrices de 5x5
-    def revisarMatricesPosiciones(self, matriz):
-        matrizRev = []
-        error = ''
-        if matriz == 'inicial':
-            matrizRev = self.posicionInicial
-        if matriz == 'final':
-            matrizRev = self.posicionFinal
-
-        if (len(matrizRev)==5):
-            for elemento in matrizRev:
-                if ((len(elemento) != 4) | ('' in elemento)):
-                    error = "Error en la matriz de posición " + matriz + ". Revise la cantidad de filas y de elementos en cada una de ellas.\n"
-                    break
-        else:
-            error = "Error en la matriz de posición " + matriz + ". Revise la cantidad de filas y de elementos en cada una de ellas.\n"
-        return error
-
-    def sustituirVariables(self, posicion):
-        matrizRev = []
-        error = ''
-        if posicion == 'inicial':
-            matrizRev = self.posicionInicial ##como Python pasa la referencia, al final no es necesario asignar el valor de matrizRev a self.posicionInicial
-        if posicion == 'final':
-            matrizRev = self.posicionFinal
-
-
-        for i in range(0, len(matrizRev)):
-            for j in range(0, len(matrizRev[i])):
-                if (matrizRev[i][j] not in self.variablesUsuario.keys()):
-                    error += "Uso de la variable '" + matrizRev[i][j] + "' no definida por el usuario.\n"
+            if not(matchObj): #si no hizo match, hay que revisar si porque corresponde a la muesca. Si con ese caso tampoco calza, definitivamente hay un error
+                matchObj = re.match( r'M[1-4]$', temp)
+                if matchObj:
+                    elemento[0] = ['C'+temp[1],'F0']
+                    elemento.append('Muesca')
                 else:
-                    matrizRev[i][j] = self.variablesSistema[  self.variablesUsuario[matrizRev[i][j]]]
+                    return  ("Hay un error en la linea: '"+temp +"'")
 
-        return error
+        self.posiciontemp = copy.deepcopy(listaPosiciones)
 
-    #antes de ejecutar este texto se debe haber asegurado de que el archivo de texto está bien construido
-    #si no se hace, fallarán las expresiones regulares
-    def setPosiciones(self):
-        if self.hayConfigInicial:
-            iniMatch = re.search(r'ini:[a-zA-Z\n\t ]+;', self.texto)
-            inicio = self.texto[iniMatch.start()+5:iniMatch.end()-1]
-            self.posicionInicial = [ re.split(r' ', x, maxsplit=3) for x in re.split(r'\n', inicio) ]
+        for elemento in self.posiciontemp:
+            temp = elemento[0]
+            elemento.pop(0)
+            elemento.insert(0, temp[0][1])
+            elemento.insert(0, temp[1][1])
 
-        if self.hayConfigFinal:
-            finMatch = re.search(r'fin:[a-zA-Z\n\t ]+;', self.texto)
-            final = self.texto[finMatch.start()+5:finMatch.end()-1]
-            self.posicionFinal = [ re.split(r' ', x, maxsplit=3) for x in re.split(r'\n', final)]
-
-        ##se revisa que las posiciones sean matrices de 5x5
-        if self.hayConfigInicial:
-            msg = self.revisarMatricesPosiciones('inicial')
-            if msg != '':
-                return msg
-        if self.hayConfigFinal:
-            msg = self.revisarMatricesPosiciones('final')
-            if msg != '':
-                return msg
-        #se sustituyen las variables del usuario por sus equivalentes en las variables del sistema
-        #se revisa que cada una de las variables haya sido definida por el usuario
-        error = ''
-        if self.hayConfigInicial:
-            error += self.sustituirVariables('inicial')
-        if self.hayConfigFinal:
-            error += self.sustituirVariables('final')
-
-
-    ##se revisa que haya 4 variables de cada color, 1 del espacio, y 3 de barrera (en las posiciones iniciales y finales)
-        if self.hayConfigInicial:
-            for variable in self.variablesSistema.values():
-                error += str(self.contarVariables(variable, 'inicial'))
-        if self.hayConfigFinal:
-            for variable in self.variablesSistema.values():
-                error += str(self.contarVariables(variable, 'final'))
-
-        return error
-
-    #cuenta cuántas veces aparece una variable en la posicion que se le indica (inicial o final)
-    def contarVariables(self, var, posicion):
-        contador = 0
-        if posicion == 'inicial':
-            for fila in self.posicionInicial:
-                for celda in fila:
-                    if celda == var:
-                        contador +=1
-        elif posicion == 'final':
-            for fila in self.posicionFinal:
-                for celda in fila:
-                    if celda == var:
-                        contador +=1
-
-        if var == "e":
-            if contador != 1:
-                return ("En posición "+ posicion +": cantidad incorrecta del elemento: 'espacio'\n")
-        if var == "n":
-            if contador != 3:
-                return ("En posición "+ posicion +": cantidad incorrecta del elemento: 'barrera'\n")
-        elif (var != "e") & (var != "n"):
-            if contador != 4:
-                return  ("En posición "+ posicion +": cantidad incorrecta del elemento: '" + self.variablesByKey[var] + "'\n")
         return ""
+
+    def montarMatriz(self):
+        for elemento in self.posiciontemp:
+            if elemento[2].lower() in self.variablesSistema.keys() :  #aqui se  valida que los colores sean validos
+
+                self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = self.variablesSistema[elemento[2].lower()]
+            elif elemento[2].lower() == 'muesca':
+                self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = 'e'
+            else:
+                #print("Uso de palabra no conocida " + elemento[2])
+                return "Uso de la palabra no reconocida por el lenguaje: '" + elemento[2] + "'"
+        return ""
+
+    def validarMatriz(self):
+        error = ''
+        #revisar la primera fila
+        #debe hacer solo una e, 3 n, y ningun otro color
+        e_fila1 = self.posicionLista[0].count('e')
+        n_fila1 = self.posicionLista[0].count('n')
+        if e_fila1 != 1:
+            error += 'Debe colocar la muesca en una única columna de la parte superior de la torre.\n'
+        if n_fila1 != 3:
+            error += 'Sólo 3 de las 4 columnas en la parte superior no deben tener elementos asignados.\n'
+
+        #revisar el resto de la matriz
+        #contar cuantos elementos hay de cada uno (incluyendo e y n)
+        #para cada elemento, ver si la cantidad corresponde con el correcto (4 de 'A' 'a' 'v' y 'r', 0 de 'e' y 0 de 'n')
+        cant_a = sum(row.count('a') for row in self.posicionLista[1:])
+        cant_A = sum(row.count('A') for row in self.posicionLista[1:])
+        cant_v = sum(row.count('v') for row in self.posicionLista[1:])
+        cant_r = sum(row.count('r') for row in self.posicionLista[1:])
+        e_matriz = sum(row.count('e') for row in self.posicionLista[1:])
+        n_matriz = sum(row.count('n') for row in self.posicionLista[1:])
+
+        if cant_a != 4:
+            error += 'Cantidad incorrecta de bolitas de color amarillo.\n'
+        if cant_A != 4:
+            error += 'Cantidad incorrecta de bolitas de color azul.\n'
+        if cant_v != 4:
+             error += 'Cantidad incorrecta de bolitas de color verde.\n'
+        if cant_r != 4:
+            error += 'Cantidad incorrecta de bolitas de color rojo.\n'
+        if e_matriz != 0:
+            error += 'No se debe colocar la muesca abajo.\n'
+        if n_matriz != 0:
+            error += 'Hay espacios sin asignar color.\n'
+        return error
 
     def getPosicionInicial(self):
         return self.posicionInicial
@@ -211,21 +152,31 @@ class Parser:
         return self.posicionFinal
 
 
-    def parsear(self):
-        if (self.archivo == ''):
+
+    def parsear(self, configuracion, archivo):
+        if (archivo == ''):
             return "Para parsear debe elegir un archivo de texto."
+
+        self.readFile(archivo)
         error = self.revisarEstructura()
+
         if (error==''):
-            error = self.montarVariables()
+            error = self.separarTexto()
             if (error == ''):
-                error = self.setPosiciones()
-                return error
-            else:
-                return error
-        else:
-            return error
+                error = self.montarMatriz()
+                if error == '':
+                    error = self.validarMatriz()
+                    if error == '':
+                        if configuracion == 'inicial':
+                            self.posicionInicial = copy.deepcopy(self.posicionLista)
+                        elif configuracion == 'final':
+                            self.posicionFinal = copy.deepcopy(self.posicionLista)
+              #  else:
+           #         return error
+            #else:
+             #   return error
 
-
+        return error
 
 
 

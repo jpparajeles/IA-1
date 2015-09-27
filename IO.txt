@@ -4,27 +4,44 @@ Con forme se vayan agregando se deben poner por escrito aquí
 
 
 Parser:
-Recibe: url del archivo
+Recibe: -
+Se debe llamar a la funcion 'parsear':
+        *si la configuracion es la inicial o la final
+        *url del archivo donde se quiere leer la configuracion
+
+        ej: test.parsear('final', 'prueba2')
+
 Regresa: string con los errores encontrados
 Si no se encontraron errores, se puede obtener las listas de las posiciones con:
         *test.getPosicionFinal()
         *test.getPosicionInicial()
 
-Características que debe tener el archivo:
-*cada bloque debe tener su etiqueta correspondiente
-*cada bloque debe terminar con '';'
-*se puede tener n cantidad de cambios de línea a lo largo del texto, pero no caracteres fuera de los bloques
-*los nombres de los colores deben ser todos en minísucla
-*solo se aceptan letras (mayúsculas y minúsculas) para los nombres de las variables
+Ejemplo de formato del archivo:
+____________________________________________
+F1C1=Verde
+F1C2=Rojo
+F1C3=Verde
+F2C1=Azul
 
-------------------Corrección en el parser--------------------------
-para cumplir con el enunciado de la progra que dice:
-"pues se exigirá también que ya sea la configuración inicial o la meta, o ambas, puedan ser dadas mediante un archivo tipo txt"
+F1C4=Verde
+F2C2=Azul
+F2C3=Azul
+F2C4=Azul
 
-La forma en la que se instancia el Parser sigue igual (para no afectar módulos que puedan estar asociados al Parser)
-Lo que cambió: el Parser por si mismo revisa que si se ingresaron las dos configuraciones o solo una, y cual.
-Para saber si el usuario ingresó la confi inicial y/o final, se tienen estos metodos:
-        --> getHayConfigInicial()
-        --> gethayConfigFinal()
-------------------Corrección en el parser--------------------------
+C1F3=Amarillo
+F3C2=AmariLLo
+F3C3=Amarillo
+F3C4=Amarillo
+M2
+F4C1=Rojo
+F4C2=Rojo
+F4C3=Verde
+F4C4=Rojo
+____________________________________________
 
+Características del archivo:
+*los colores no son case sentive
+*es indiferente el orden de fila - columna   --> para el parser 'C1F3' es igual a 'F3C1'
+*la muesca se coloca con solo M y el num de columna
+*si en dos lineas diferentes se define el color para una misma posición en la matriz, se tomará la ultima que aparezca
+*puede hacer espacios y \n ilimitados
