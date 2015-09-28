@@ -47,7 +47,7 @@ bio = Tower(
 
 #"""
 
-tt = test2
+tt = bio
 newNodo = Nodo(tt, None, 0)
 finNodo = Nodo(final, None, 0)
 newNodo.H=h(newNodo.toDict(), finNodo.toDict())

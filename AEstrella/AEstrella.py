@@ -9,13 +9,14 @@ N = "n"
 from AEstrella.Nodo import *
 from TowerP.Tower import printBeauty
 from AEstrella.TriList import TriList, PentaList
-
+from itertools import permutations
 
 def busqueda(ModeloI, ModeloF):
     return estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
 
 
 def Cross(init, end):
+    """
     acc = 0
     for i in init:
         work = []
@@ -23,7 +24,21 @@ def Cross(init, end):
             work.append(i.diff(j))
         acc += min(work)
     return acc
-
+    """
+    wk = []
+    for i in init:
+        inn = []
+        for j in end:
+            inn.append(i.diff(j))
+        wk.append(inn)
+    perm = permutations(range(0,len(wk)))
+    ret = []
+    for p in perm:
+        acc = 0
+        for i, k in enumerate(wk):
+            acc += k[p[i]]
+        ret.append(acc)
+    return min(ret)
 
 def h(actual, meta):
     """obtiene la h^ entre el actual y la distancia
@@ -91,11 +106,11 @@ def estrella(inicial, final):
 
         #stop = timeit.default_timer()
         #print (stop - start)
-        if contar%100000 == 5:
+        if contar%10000 == 5:
             print(min_f.H, min_f.G)
             print(contar)
             print(len(abiertos))
-            print(len(cerrados))
+            #print(len(cerrados))
         contar+=1
         #printBeauty(min_f.Modelo.matrix)
         #print()
