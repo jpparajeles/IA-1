@@ -47,7 +47,7 @@ bio = Tower(
 
 #"""
 
-tt = bio
+tt = test2
 newNodo = Nodo(tt, None, 0)
 finNodo = Nodo(final, None, 0)
 newNodo.H=h(newNodo.toDict(), finNodo.toDict())
@@ -55,6 +55,7 @@ print(newNodo.H)
 print("hola")
 start = timeit.default_timer()
 result = busqueda(tt,final)
+#result = busqueda(final,tt)
 print("Resultado")
 print(result.f())
 printBeauty(result.Modelo.matrix)

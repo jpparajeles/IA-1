@@ -60,6 +60,20 @@ class Nodo:
 
 """
 
+def floorkiller(nodo,destino):
+    """Encuenda si ya esta el modelo en una lista
+
+    :type destino: AEstrella.Nodo.Nodo
+    :type nodo: AEstrella.Nodo.Nodo
+    """
+    ret = []
+    for i in range(4,-1,-1):
+        if nodo.Modelo.matrix[i] != destino.Modelo.matrix[i]:
+            return ret
+        ret.append(i)
+    return ret
+
+
 
 def findEq(nodo, list):
     """Encuenda si ya esta el modelo en una lista

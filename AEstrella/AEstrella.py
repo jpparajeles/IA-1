@@ -1,5 +1,7 @@
 import timeit
 
+MAX_D = 96
+
 __author__ = 'JP'
 E = "e"
 N = "n"
@@ -36,6 +38,23 @@ def h(actual, meta):
     return acc
 
 
+def floork(inicial, target, succ):
+    """
+
+
+    :type succ: list
+    :type inicial: AEstrella.Nodo.Nodo
+    :type target: AEstrella.Nodo.Nodo
+    """
+    inv = floorkiller(inicial, target)
+    for i in inv:
+        if target.Modelo.matrix[i]!=succ[i*2].Modelo.matrix[i]:
+            succ[i*2].H+= MAX_D
+        if target.Modelo.matrix[i]!=succ[i*2+1].Modelo.matrix[i]:
+            succ[i*2+1].H+= MAX_D
+
+
+
 def sucesores(inicial, modelo_d):
     """ Encuentra los sucesores de un nodo dado y les asigna los valores
 
@@ -63,6 +82,7 @@ def estrella(inicial, final):
 
     abiertos.add(inicial)
     abiertos_f.add(inicial)
+    contar = 0
     while abiertos:
         #start = timeit.default_timer()
 
@@ -71,14 +91,21 @@ def estrella(inicial, final):
 
         #stop = timeit.default_timer()
         #print (stop - start)
-        print(min_f.H, min_f.G)
+        if contar%100000 == 5:
+            print(min_f.H, min_f.G)
+            print(contar)
+            print(len(abiertos))
+            print(len(cerrados))
+        contar+=1
         #printBeauty(min_f.Modelo.matrix)
         #print()
 
         cerrados.add(min_f)
         cerrados_f.add(min_f)
 
-        for sucesor in sucesores(min_f, final_d):
+        succ = sucesores(min_f, final_d)
+        floork(min_f,final,succ)
+        for sucesor in succ:
             if(sucesor.igual(final)):
                 print(len(abiertos))
                 print(len(cerrados))
