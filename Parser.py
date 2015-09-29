@@ -55,7 +55,7 @@ class Parser:
     def revisarEstructura(self): #revisa si se ingreso las dos configuraciones (inicial y final) o solo una de ellas (e indica cuál)
         self.texto = re.sub(r"[\n]+","\n", self.texto) #quita line breaks extra
         self.texto = re.sub(r"[ ]+","", self.texto)  #quita los espacios extra
-        print(self.texto)
+        #print(self.texto)
         matchObj = re.match( r'^(\w+=\w+\n*|M[1-9]\n*|\n)*$', self.texto, re.U)
         self.separarTexto()
         if matchObj:
@@ -66,11 +66,11 @@ class Parser:
 
     def separarTexto(self):
         listaPosiciones = [ re.split(r'=', x, maxsplit=2) for x in re.split(r'\n', self.texto) ]
-        if listaPosiciones.count(['']) > 0:
+        while listaPosiciones.count(['']) > 0:
             listaPosiciones.remove([''])
         for elemento in listaPosiciones:
             temp = elemento[0]
-            matchObj = re.match( r'F[1-5]C[1-4]|C[1-4]F[1-5]$', temp)
+            matchObj = re.match( r'F[1-4]C[1-4]|C[1-4]F[1-4]$', temp)
 
             if len(temp) > 2:
                 elemento[0] = [ temp[:2], temp[2:]  ]
@@ -84,7 +84,7 @@ class Parser:
                 matchObj = re.match( r'M[1-4]$', temp)
                 if matchObj:
                     elemento[0] = ['C'+temp[1],'F0']
-                    elemento.append('Muesca')
+                    elemento.append('muesca')
                 else:
                     return  ("Hay un error en la linea: '"+temp +"'")
 
@@ -104,6 +104,7 @@ class Parser:
 
                 self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = self.variablesSistema[elemento[2].lower()]
             elif elemento[2].lower() == 'muesca':
+
                 self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = 'e'
             else:
                 #print("Uso de palabra no conocida " + elemento[2])
@@ -157,6 +158,10 @@ class Parser:
         if (archivo == ''):
             return "Para parsear debe elegir un archivo de texto."
 
+        self.posiciontemp = []
+        self.posicionLista = self.inicializarLista()
+
+
         self.readFile(archivo)
         error = self.revisarEstructura()
 
@@ -171,10 +176,6 @@ class Parser:
                             self.posicionInicial = copy.deepcopy(self.posicionLista)
                         elif configuracion == 'final':
                             self.posicionFinal = copy.deepcopy(self.posicionLista)
-              #  else:
-           #         return error
-            #else:
-             #   return error
 
         return error
 
