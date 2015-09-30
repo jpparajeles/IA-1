@@ -88,7 +88,7 @@ def sucesores(inicial, modelo_d):
 
 def estrella(inicial, final):
     abiertos = TriList()
-    cerrados = TriList()
+    #cerrados = TriList()
     abiertos_f = PentaList()
     cerrados_f = PentaList()
 
@@ -115,7 +115,7 @@ def estrella(inicial, final):
         #printBeauty(min_f.Modelo.matrix)
         #print()
 
-        cerrados.add(min_f)
+        #cerrados.add(min_f)
         cerrados_f.add(min_f)
 
         succ = sucesores(min_f, final_d)
@@ -123,7 +123,8 @@ def estrella(inicial, final):
         for sucesor in succ:
             if(sucesor.igual(final)):
                 print(len(abiertos))
-                print(len(cerrados))
+                #print(len(cerrados))
+                print(contar)
                 return sucesor
             if(cerrados_f.find(sucesor)):
                 continue
