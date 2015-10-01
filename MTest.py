@@ -24,11 +24,13 @@ result = busqueda(easy,final)
 
 for elem in result:
     try:
-        printBeauty(elem.Move.tower.matrix) #deberia ser la funcion para escribir en archivos
+        print(elem.description)
+        printBeauty(elem.tower.matrix) #deberia ser la funcion para escribir en archivos
+        #printBeauty(elem.Modelo.matrix)
     except:
         printBeauty(easy.matrix) # inicial #deberia ser la funcion para escribir en archivos
     print() #\n
 
 
 writer = Writer()
-writer.writeSolution( easy,result)
+writer.writeSolution(easy,result)

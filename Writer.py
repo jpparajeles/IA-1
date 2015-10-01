@@ -11,7 +11,8 @@ class Writer:
         text = ''
         for elem in result:
             try:
-                text += (self.matrix2Txt(elem.Move.tower.matrix)) #deberia ser la funcion para escribir en archivos
+                text += elem.description + "\n"
+                text += (self.matrix2Txt(elem.tower.matrix)) #deberia ser la funcion para escribir en archivos
             except:
                 text += (self.matrix2Txt(initialMat.matrix)) # inicial #deberia ser la funcion para escribir en archivos
             print(text) #\n
