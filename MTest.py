@@ -2,7 +2,7 @@ from AEstrella.AEstrella import busqueda
 
 __author__ = 'ia'
 from TowerP.Tower import Tower, printBeauty
-
+from Writer import *
 # debe leerse de algun lado
 final=Tower(
 [['n','n','n','e'],
@@ -13,8 +13,8 @@ final=Tower(
 
 # igual que aqui
 easy=Tower( #0.5s
-[['n','n','n','r'],
-['a','a','v','e'],
+[['n','n','n','e'],
+['a','a','v','r'],
 ['r','v','A','A'],
 ['a','v','A','r'],
 ['a','v','A','r']])
@@ -28,3 +28,7 @@ for elem in result:
     except:
         printBeauty(easy.matrix) # inicial #deberia ser la funcion para escribir en archivos
     print() #\n
+
+
+writer = Writer()
+writer.writeSolution( easy,result)
