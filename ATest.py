@@ -74,6 +74,28 @@ level14=Tower( #18.8s
 ['a','v','A','r'],
 ['a','A','v','r']])
 
+
+level23=Tower(
+[['n','n','n','e'],
+['a','v','A','r'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','v','A','r']])
+
+level24=Tower(
+[['n','n','n','e'],
+['a','v','A','r'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','A','v','r']])
+
+level34=Tower(
+[['n','n','n','e'],
+['a','v','A','r'],
+['a','v','A','r'],
+['a','A','v','r'],
+['a','A','v','r']])
+
 easy=Tower( #0.5s
 [['n','n','n','r'],
 ['a','a','v','e'],
@@ -109,9 +131,17 @@ test3=Tower(
 ['a','v','A','r'],
 ['v','r','a','A']])
 
+
+level123=Tower(
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','v','A','r']])
+
 #"""
 
-tt = level14
+tt = level123
 
 newNodo = Nodo(tt, None, 0, None)
 finNodo = Nodo(final, None, 0, None)

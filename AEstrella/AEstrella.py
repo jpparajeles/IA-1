@@ -14,10 +14,10 @@ from AEstrella.TriList import TriList, PentaList
 from itertools import permutations
 
 def busquedaT(ModeloI, ModeloF):
-    return estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
+    return estrella(Nodo(ModeloI,None,0,None,0),Nodo(ModeloF,None, 0,None,0))
 
 def busqueda(ModeloI, ModeloF):
-    return toList(estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0)))
+    return toList(estrella(Nodo(ModeloI,None,0,None,0),Nodo(ModeloF,None, 0,None,0)))
 
 
 
