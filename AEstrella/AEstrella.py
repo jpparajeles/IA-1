@@ -148,9 +148,9 @@ def estrella(inicial, final):
         #uppercost(final_r,succ)
         for sucesor in succ:
             if(sucesor.igual(final)):
-                print(len(abiertos))
+                #print(len(abiertos))
                 #print(len(cerrados))
-                print(contar)
+                #print(contar)
                 return sucesor
             if(cerrados_f.find(sucesor)):
                 continue
