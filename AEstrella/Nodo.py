@@ -1,15 +1,18 @@
+from collections import deque
 from AEstrella.tools import Point
+from TowerP.Movement import Movement
 
 __author__ = 'JP'
 
 class Nodo:
-    def __init__(self, pModelo, pPadre, pG, pH=-1):
+    def __init__(self, pModelo, pPadre, pG, move, pH=-1):
         """Inicia el nodo
         """
         self.Modelo = pModelo
         self.Padre = pPadre
         self.G = pG
         self.H = pH
+        self.Move = move
     def f(self):
         """Retorna F"""
         return self.G + self.H
@@ -26,6 +29,7 @@ class Nodo:
                 else:
                     ret[elem].append(Point(i,j))
         return ret
+
 
 """
     def __lt__(self, other):
@@ -86,3 +90,38 @@ def findEq(nodo, list):
             return elem
     return False
 
+def toList(nodo):
+    """Devuelve los Mov en una lista
+
+    :type nodo: AEstrella.Nodo.Nodo
+    """
+    current = nodo
+    ret = []
+    while current:
+        ret.append(current.Move)
+        current = current.Padre
+    ret.reverse()
+    return ret
+
+def makeRotations(nodo):
+    """
+
+    :type nodo: AEstrella.Nodo.Nodo
+    """
+    ret = dict()
+    for i, row in enumerate(nodo.Modelo.matrix):
+        ret[i]=rotar(row)
+    return ret
+
+
+def rotar(fila):
+    """
+
+    :type fila: list
+    """
+    rotator = deque(fila)
+    ret = set()
+    for i in range(0,len(fila)):
+        rotator.rotate(1)
+        ret.add("".join(list(rotator)))
+    return ret

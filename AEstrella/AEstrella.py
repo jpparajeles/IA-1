@@ -1,5 +1,7 @@
 import timeit
 
+UPPERC = 5
+
 MAX_D = 96
 
 __author__ = 'JP'
@@ -11,8 +13,12 @@ from TowerP.Tower import printBeauty
 from AEstrella.TriList import TriList, PentaList
 from itertools import permutations
 
-def busqueda(ModeloI, ModeloF):
+def busquedaT(ModeloI, ModeloF):
     return estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0))
+
+def busqueda(ModeloI, ModeloF):
+    return toList(estrella(Nodo(ModeloI,None,0,0),Nodo(ModeloF,None, 0,0)))
+
 
 
 def Cross(init, end):
@@ -25,17 +31,17 @@ def Cross(init, end):
         acc += min(work)
     return acc
     """
-    wk = []
+    diffmatrix = []
     for i in init:
-        inn = []
+        difflist = []
         for j in end:
-            inn.append(i.diff(j))
-        wk.append(inn)
-    perm = permutations(range(0,len(wk)))
+            difflist.append(i.diff(j))
+        diffmatrix.append(difflist)
+    perm = permutations(range(0,len(diffmatrix)))
     ret = []
     for p in perm:
         acc = 0
-        for i, k in enumerate(wk):
+        for i, k in enumerate(diffmatrix):
             acc += k[p[i]]
         ret.append(acc)
     return min(ret)
@@ -69,6 +75,22 @@ def floork(inicial, target, succ):
             succ[i*2+1].H+= MAX_D
 
 
+def uppercost(target, succ):
+    """
+    :type inicial: dict
+    :type target: AEstrella.Nodo.Nodo
+    """
+    for suc in succ:
+        acc = 0
+        for i,row in enumerate(suc.Modelo.matrix[1:]):
+            if "".join(row) in target[i]:
+                continue
+            else:
+                acc+= 1
+        suc.H+=acc
+
+
+
 
 def sucesores(inicial, modelo_d):
     """ Encuentra los sucesores de un nodo dado y les asigna los valores
@@ -79,7 +101,7 @@ def sucesores(inicial, modelo_d):
     """
     ret = []
     for mov in inicial.Modelo.getNextMovements():
-        newNodo = Nodo(mov.tower, inicial, mov.cost+inicial.G)
+        newNodo = Nodo(mov.tower, inicial, mov.cost+inicial.G, mov)
         newNodo.H=h(newNodo.toDict(), modelo_d)
         ret.append(newNodo)
     return ret
@@ -93,6 +115,7 @@ def estrella(inicial, final):
     cerrados_f = PentaList()
 
     final_d = final.toDict()
+    final_r = makeRotations(final)
     inicial.H = h(inicial.toDict(),final_d)
 
     abiertos.add(inicial)
@@ -106,11 +129,13 @@ def estrella(inicial, final):
 
         #stop = timeit.default_timer()
         #print (stop - start)
-        if contar%10000 == 5:
+        """
+        if contar%1000 == 5:
             print(min_f.H, min_f.G)
             print(contar)
             print(len(abiertos))
             #print(len(cerrados))
+        """
         contar+=1
         #printBeauty(min_f.Modelo.matrix)
         #print()
@@ -120,6 +145,7 @@ def estrella(inicial, final):
 
         succ = sucesores(min_f, final_d)
         floork(min_f,final,succ)
+        #uppercost(final_r,succ)
         for sucesor in succ:
             if(sucesor.igual(final)):
                 print(len(abiertos))

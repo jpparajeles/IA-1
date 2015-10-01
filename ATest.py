@@ -1,6 +1,6 @@
 __author__ = 'jparajeles'
 
-from AEstrella.AEstrella import busqueda, h
+from AEstrella.AEstrella import busqueda, h, busquedaT
 from AEstrella.Nodo import Nodo
 from TowerP.Tower import Tower, printBeauty
 import timeit
@@ -16,6 +16,63 @@ final=Tower(
 ['a','v','A','r'],
 ['a','v','A','r'],
 ['a','v','A','r']])
+
+
+level1=Tower( #0.4-0.5s
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','v','A','r'],
+['a','v','A','r']])
+
+level2=Tower( #0.9s
+[['n','n','n','e'],
+['a','v','A','r'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','v','A','r']])
+
+level3=Tower( #1.7s
+[['n','n','n','e'],
+['a','v','A','r'],
+['a','v','A','r'],
+['a','A','v','r'],
+['a','v','A','r']])
+
+level4=Tower( #18.8s
+[['n','n','n','e'],
+['a','v','A','r'],
+['a','v','A','r'],
+['a','v','A','r'],
+['a','A','v','r']])
+
+level=Tower(
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','A','v','r']])
+
+level12=Tower( #18.8s
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','v','A','r']])
+
+level13=Tower( #18.8s
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','A','v','r'],
+['a','v','A','r']])
+
+level14=Tower( #18.8s
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','v','A','r'],
+['a','A','v','r']])
 
 easy=Tower( #0.5s
 [['n','n','n','r'],
@@ -54,14 +111,16 @@ test3=Tower(
 
 #"""
 
-tt = bio
-newNodo = Nodo(tt, None, 0)
-finNodo = Nodo(final, None, 0)
+tt = level14
+
+newNodo = Nodo(tt, None, 0, None)
+finNodo = Nodo(final, None, 0, None)
 newNodo.H=h(newNodo.toDict(), finNodo.toDict())
 print(newNodo.H)
-print("hola")
+print()
 start = timeit.default_timer()
-result = busqueda(tt,final)
+result = busquedaT(tt,final)
+
 #result = busqueda(final,tt)
 print("Resultado")
 print(result.f())
@@ -70,3 +129,25 @@ stop = timeit.default_timer()
 
 print (stop - start)
 #"""
+
+def Analisis(resulta):
+    ini = resulta
+    print("Desgloce")
+    conteo = 0
+    while ini:
+        print()
+        printBeauty(ini.Modelo.matrix)
+        try:
+            print(ini.Move.description)
+        except:
+            print("inicial")
+        print(ini.G)
+        print(ini.H)
+        ini = ini.Padre
+        conteo += 1
+    print()
+    print("LEN")
+    print(conteo)
+
+
+Analisis(result)
