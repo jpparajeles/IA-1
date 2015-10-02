@@ -2,6 +2,7 @@ from tkinter import *
 import time
 import tkinter.filedialog
 import os
+from Parser import *
 
 ListaElementos = [["n","n","v","n"],["a","e","A","a"],["a","r","r","A"],["A","A","r","r"],["v","v","v","v"]]
 ListaObj = []
@@ -13,7 +14,7 @@ ListaEstados2 = [[0,5,5,5],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]]
 root = Tk()
 root.title('Torre de Babilonia')
 w = 1000 # El largo de la ventana
-h = 600 # La altura de la ventana
+h = 800 # La altura de la ventana
 
 # Obtener el largo y alto de la ventana
 ws = root.winfo_screenwidth() # Largo de la ventana
@@ -49,10 +50,10 @@ image_Tiny = PhotoImage(file="../Imagenes/image_tiny.png")
 
 #Crea la torre
 labelTower1 = Label(window,image = TowerFontA)
-window.create_window(20,150, window=labelTower1, anchor=NW, width=279, height=300)
+window.create_window(20,290, window=labelTower1, anchor=NW, width=279, height=300)
 #Crea la torre2
 labelTower2 = Label(window,image = TowerFontA)
-window.create_window(320,150, window=labelTower2, anchor=NW, width=279, height=300)
+window.create_window(320,290, window=labelTower2, anchor=NW, width=279, height=300)
 
 
 #Declara los labels de cada elemento de la torre
@@ -82,35 +83,35 @@ ListaObj.append(Button(window,image = imageBall_Green ,borderwidth=0,highlightth
 ListaObj.append(Button(window,image = imageBall_Yellow,borderwidth=0,highlightthickness=0, command=lambda: CambiaEstado(1,ListaObj,ListaEstados1,4,3)))
 
 #Crea los labels de la torre
-window.create_window(36 ,165, window=ListaObj[0] , anchor=NW, width=50, height=50)
-window.create_window(103,165, window=ListaObj[1] , anchor=NW, width=50, height=50)
-window.create_window(168,165, window=ListaObj[2] , anchor=NW, width=50, height=50)
-window.create_window(233,165, window=ListaObj[3] , anchor=NW, width=50, height=50)
+window.create_window(36 ,305, window=ListaObj[0] , anchor=NW, width=50, height=50)
+window.create_window(103,305, window=ListaObj[1] , anchor=NW, width=50, height=50)
+window.create_window(168,305, window=ListaObj[2] , anchor=NW, width=50, height=50)
+window.create_window(233,305, window=ListaObj[3] , anchor=NW, width=50, height=50)
 
-window.create_window(36 ,221, window=ListaObj[4] , anchor=NW, width=50, height=50)
-window.create_window(103,221, window=ListaObj[5] , anchor=NW, width=50, height=50)
-window.create_window(168,221, window=ListaObj[6] , anchor=NW, width=50, height=50)
-window.create_window(233,221, window=ListaObj[7] , anchor=NW, width=50, height=50)
+window.create_window(36 ,361, window=ListaObj[4] , anchor=NW, width=50, height=50)
+window.create_window(103,361, window=ListaObj[5] , anchor=NW, width=50, height=50)
+window.create_window(168,361, window=ListaObj[6] , anchor=NW, width=50, height=50)
+window.create_window(233,361, window=ListaObj[7] , anchor=NW, width=50, height=50)
 
-window.create_window(36 ,275, window=ListaObj[8] , anchor=NW, width=50, height=50)
-window.create_window(103,275, window=ListaObj[9] , anchor=NW, width=50, height=50)
-window.create_window(168,275, window=ListaObj[10], anchor=NW, width=50, height=50)
-window.create_window(233,275, window=ListaObj[11], anchor=NW, width=50, height=50)
+window.create_window(36 ,415, window=ListaObj[8] , anchor=NW, width=50, height=50)
+window.create_window(103,415, window=ListaObj[9] , anchor=NW, width=50, height=50)
+window.create_window(168,415, window=ListaObj[10], anchor=NW, width=50, height=50)
+window.create_window(233,415, window=ListaObj[11], anchor=NW, width=50, height=50)
 
-window.create_window(36 ,330, window=ListaObj[12], anchor=NW, width=50, height=50)
-window.create_window(103,330, window=ListaObj[13], anchor=NW, width=50, height=50)
-window.create_window(168,330, window=ListaObj[14], anchor=NW, width=50, height=50)
-window.create_window(233,330, window=ListaObj[15], anchor=NW, width=50, height=50)
+window.create_window(36 ,470, window=ListaObj[12], anchor=NW, width=50, height=50)
+window.create_window(103,470, window=ListaObj[13], anchor=NW, width=50, height=50)
+window.create_window(168,470, window=ListaObj[14], anchor=NW, width=50, height=50)
+window.create_window(233,470, window=ListaObj[15], anchor=NW, width=50, height=50)
 
-window.create_window(36 ,385, window=ListaObj[16], anchor=NW, width=50, height=50)
-window.create_window(103,385, window=ListaObj[17], anchor=NW, width=50, height=50)
-window.create_window(168,385, window=ListaObj[18], anchor=NW, width=50, height=50)
-window.create_window(233,385, window=ListaObj[19], anchor=NW, width=50, height=50)
+window.create_window(36 ,525, window=ListaObj[16], anchor=NW, width=50, height=50)
+window.create_window(103,525, window=ListaObj[17], anchor=NW, width=50, height=50)
+window.create_window(168,525, window=ListaObj[18], anchor=NW, width=50, height=50)
+window.create_window(233,525, window=ListaObj[19], anchor=NW, width=50, height=50)
 
-window.create_window(36 ,165, window=ListaObj[0] , anchor=NW, width=50, height=50)
-window.create_window(103,165, window=ListaObj[1] , anchor=NW, width=50, height=50)
-window.create_window(168,165, window=ListaObj[2] , anchor=NW, width=50, height=50)
-window.create_window(233,165, window=ListaObj[3] , anchor=NW, width=50, height=50)
+window.create_window(36 ,305, window=ListaObj[0] , anchor=NW, width=50, height=50)
+window.create_window(103,305, window=ListaObj[1] , anchor=NW, width=50, height=50)
+window.create_window(168,305, window=ListaObj[2] , anchor=NW, width=50, height=50)
+window.create_window(233,305, window=ListaObj[3] , anchor=NW, width=50, height=50)
 
 def CambiaEstado(estado, ListaObjetos,Posiciones,x,y):
     global v
@@ -166,35 +167,35 @@ ListaObj2.append(Button(window,image = imageBall_Green ,borderwidth=0,highlightt
 ListaObj2.append(Button(window,image = imageBall_Yellow,borderwidth=0,highlightthickness=0, command=lambda: CambiaEstado(2,ListaObj2,ListaEstados2,4,3)))
 
 #Crea los labels de la torre
-window.create_window(336 ,165, window=ListaObj2[0] , anchor=NW, width=50, height=50)
-window.create_window(403,165, window=ListaObj2[1] , anchor=NW, width=50, height=50)
-window.create_window(468,165, window=ListaObj2[2] , anchor=NW, width=50, height=50)
-window.create_window(533,165, window=ListaObj2[3] , anchor=NW, width=50, height=50)
+window.create_window(336 ,305, window=ListaObj2[0] , anchor=NW, width=50, height=50)
+window.create_window(403,305, window=ListaObj2[1] , anchor=NW, width=50, height=50)
+window.create_window(468,305, window=ListaObj2[2] , anchor=NW, width=50, height=50)
+window.create_window(533,305, window=ListaObj2[3] , anchor=NW, width=50, height=50)
 
-window.create_window(336 ,221, window=ListaObj2[4] , anchor=NW, width=50, height=50)
-window.create_window(403,221, window=ListaObj2[5] , anchor=NW, width=50, height=50)
-window.create_window(468,221, window=ListaObj2[6] , anchor=NW, width=50, height=50)
-window.create_window(533,221, window=ListaObj2[7] , anchor=NW, width=50, height=50)
+window.create_window(336 ,361, window=ListaObj2[4] , anchor=NW, width=50, height=50)
+window.create_window(403,361, window=ListaObj2[5] , anchor=NW, width=50, height=50)
+window.create_window(468,361, window=ListaObj2[6] , anchor=NW, width=50, height=50)
+window.create_window(533,361, window=ListaObj2[7] , anchor=NW, width=50, height=50)
 
-window.create_window(336 ,275, window=ListaObj2[8] , anchor=NW, width=50, height=50)
-window.create_window(403,275, window=ListaObj2[9] , anchor=NW, width=50, height=50)
-window.create_window(468,275, window=ListaObj2[10], anchor=NW, width=50, height=50)
-window.create_window(533,275, window=ListaObj2[11], anchor=NW, width=50, height=50)
+window.create_window(336 ,415, window=ListaObj2[8] , anchor=NW, width=50, height=50)
+window.create_window(403,415, window=ListaObj2[9] , anchor=NW, width=50, height=50)
+window.create_window(468,415, window=ListaObj2[10], anchor=NW, width=50, height=50)
+window.create_window(533,415, window=ListaObj2[11], anchor=NW, width=50, height=50)
 
-window.create_window(336 ,330, window=ListaObj2[12], anchor=NW, width=50, height=50)
-window.create_window(403,330, window=ListaObj2[13], anchor=NW, width=50, height=50)
-window.create_window(468,330, window=ListaObj2[14], anchor=NW, width=50, height=50)
-window.create_window(533,330, window=ListaObj2[15], anchor=NW, width=50, height=50)
+window.create_window(336 ,470, window=ListaObj2[12], anchor=NW, width=50, height=50)
+window.create_window(403,470, window=ListaObj2[13], anchor=NW, width=50, height=50)
+window.create_window(468,470, window=ListaObj2[14], anchor=NW, width=50, height=50)
+window.create_window(533,470, window=ListaObj2[15], anchor=NW, width=50, height=50)
 
-window.create_window(336 ,385, window=ListaObj2[16], anchor=NW, width=50, height=50)
-window.create_window(403,385, window=ListaObj2[17], anchor=NW, width=50, height=50)
-window.create_window(468,385, window=ListaObj2[18], anchor=NW, width=50, height=50)
-window.create_window(533,385, window=ListaObj2[19], anchor=NW, width=50, height=50)
+window.create_window(336 ,525, window=ListaObj2[16], anchor=NW, width=50, height=50)
+window.create_window(403,525, window=ListaObj2[17], anchor=NW, width=50, height=50)
+window.create_window(468,525, window=ListaObj2[18], anchor=NW, width=50, height=50)
+window.create_window(533,525, window=ListaObj2[19], anchor=NW, width=50, height=50)
 
-window.create_window(336 ,165, window=ListaObj2[0] , anchor=NW, width=50, height=50)
-window.create_window(403,165, window=ListaObj2[1] , anchor=NW, width=50, height=50)
-window.create_window(468,165, window=ListaObj2[2] , anchor=NW, width=50, height=50)
-window.create_window(533,165, window=ListaObj2[3] , anchor=NW, width=50, height=50)
+window.create_window(336 ,305, window=ListaObj2[0] , anchor=NW, width=50, height=50)
+window.create_window(403,305, window=ListaObj2[1] , anchor=NW, width=50, height=50)
+window.create_window(468,305, window=ListaObj2[2] , anchor=NW, width=50, height=50)
+window.create_window(533,305, window=ListaObj2[3] , anchor=NW, width=50, height=50)
 
 def CargarFila1(labelTower,ListaE,ListaObjetos,i,j):
     if (ListaE[i][j]=="n"):
@@ -209,12 +210,16 @@ def CargarFila1(labelTower,ListaE,ListaObjetos,i,j):
     elif (ListaE[i][j]=="e"):
         if (j==0):
             labelTower.config(image = TowerFontA)
+            ListaObjetos[0].config(image = imageBall_Empty)
         elif (j==1):
             labelTower.config(image = TowerFontB)
+            ListaObjetos[1].config(image = imageBall_Empty)
         elif (j==2):
             labelTower.config(image = TowerFontC)
+            ListaObjetos[2].config(image = imageBall_Empty)
         elif (j==3):
             labelTower.config(image = TowerFontD)
+            ListaObjetos[3].config(image = imageBall_Empty)
     elif (ListaE[i][j]=="A"):
         if (j==0):
             labelTower.config(image = TowerFontA)
@@ -332,19 +337,27 @@ def CargarActual(labelTower1,ListaE,ListaObjetos):
     
 #ListaElementos = [["n","n","a","n"],["a","e","A","a"],["a","r","r","A"],["A","A","r","r"],["v","v","v","v"]]
 def Cambia():
-    L1=[["n","n","a","n"],["a","v","A","a"],["a","r","e","A"],["A","A","r","r"],["v","v","v","v"]]
+    L1=[['n', 'n', 'n', 'e'], ['a', 'A', 'v', 'r'], ['a', 'v', 'A', 'r'], ['a', 'v', 'A', 'r'], ['a', 'v', 'A', 'r']]
     CargarActual(labelTower1,L1,ListaObj)
     CargarActual(labelTower2,L1,ListaObj2)
     root.after(500, CambiaN)
 
 def CambiaN():
-    L2=[["n","v","n","n"],["a","e","v","a"],["a","a","v","A"],["v","A","v","r"],["a","v","r","A"]]
+    L2=[['n', 'n', 'e', 'n'], ['a', 'A', 'v', 'r'], ['a', 'v', 'A', 'r'], ['a', 'v', 'A', 'r'], ['a', 'v', 'A', 'r']]
     CargarActual(labelTower1,L2,ListaObj)
     CargarActual(labelTower2,L2,ListaObj2)
     root.after(500, Cambia)
 
+
+
 #Funcion que valida botones del modo automatico
 def ValidaAutomatico():
+    global muesca1
+    global muesca2
+    muesca1 = 0
+    muesca2 = 0
+    ListaEstados1[0]=[0,5,5,5]
+    ListaEstados2[0]=[0,5,5,5]
     L1=[["e","n","n","n"],["r","A","v","a"],["r","A","v","a"],["r","A","v","a"],["r","A","v","a"]]
     CargarActual(labelTower1,L1,ListaObj)
     CargarActual(labelTower2,L1,ListaObj2)
@@ -356,10 +369,21 @@ def ValidaAutomatico():
     buttonSolucionManual.config(state="disabled")
     buttonConfInicial.config(state="normal")
     buttonConfFinal.config(state="normal")
-    buttonSolucionAutomatico.config(state="normal")
+    labelRuta1Auto.config(text="Ruta:", state="normal")
+    labelRuta2Auto.config(text="Ruta:", state="normal")
+    labelRuta1Manual.config(text="Ruta:", state="disabled")
+    labelRuta2Manual.config(text="Ruta:", state="disabled")
+
+
 
 #Funcion que valida los botones del modo manual
 def ValidaManual():
+    global muesca1
+    global muesca2
+    muesca1 = 0
+    muesca2 = 0
+    ListaEstados1[0]=[0,5,5,5]
+    ListaEstados2[0]=[0,5,5,5]
     L1=[["e","n","n","n"],["r","A","v","a"],["r","A","v","a"],["r","A","v","a"],["r","A","v","a"]]
     CargarActual(labelTower1,L1,ListaObj)
     CargarActual(labelTower2,L1,ListaObj2)
@@ -367,34 +391,80 @@ def ValidaManual():
     buttonMuesca1.config(state="normal")
     buttonColorMuesca2.config(state="normal")
     buttonMuesca2.config(state="normal")
-    buttonSolucionManual.config(state="normal")
     buttonConfInicial.config(state="disabled")
     buttonConfFinal.config(state="disabled")
     buttonSolucionAutomatico.config(state="disabled")
+    labelRuta1Auto.config(text="Ruta:", state="disabled")
+    labelRuta2Auto.config(text="Ruta:", state="disabled")
+    labelRuta1Manual.config(text="Ruta:", state="normal")
+    labelRuta2Manual.config(text="Ruta:", state="normal")
 
 #MODO AUTOMATICO----------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------
 
+dirNameInicial=""
+dirNameFinal=""
+listaInicial=[]
+listaFinal=[]
 #Funcion que solicita la ruta de los archivos
 def SolicitaRuta(opcion):
+    global dirNameFinal
+    global dirNameInicial
     if (opcion == 1):
         dirNameInicial = tkinter.filedialog.askopenfilename(title = "Configuración inicial",initialdir='./' )
         print("Ruta de archivo de configuración inicial: " +dirNameInicial)
     else:
         dirNameFinal = tkinter.filedialog.askopenfilename(title = "Configuración final",initialdir='./' )
         print("Ruta de archivo de configuración final: " +dirNameFinal)
+    VerificaAutomatico()
+
+def VerificaAutomatico():
+    global dirNameInicial
+    global dirNameFinal
+    test = Parser();
+    #el primer parametro indica si es la configuracion inicial o la final, el segundo es el archivo de texto
+    msg1 = test.parsear('inicial', dirNameInicial)
+    msg2 = test.parsear('final', dirNameFinal)
+    if (msg1 == ''):
+        labelRuta1Auto.config(text="Archivo con formato correcto!")
+    else:
+        print ("Errores en config inicial: \n",msg1)
+        labelRuta1Auto.config(text="Error en configuración inicial: "+msg1)
+    if (msg2 == ''):
+        labelRuta2Auto.config(text="Archivo con formato correcto!")
+    else:
+        labelRuta2Auto.config(text="Error en configuración final: "+msg2)
+    global listaInicial
+    global listaFinal
+    listaInicial = test.getPosicionInicial()
+    listaFinal = test.getPosicionFinal()
+    if (msg1=="" and msg2==""):
+        buttonSolucionAutomatico.config(state="normal")
+    else:
+        buttonSolucionAutomatico.config(state="disabled")
+
+def CargaAutomatico():
+    global listaInicial
+    global listaFinal
+    CargarActual(labelTower1,listaInicial,ListaObj)
+    CargarActual(labelTower2,listaFinal,ListaObj2)
 
 #Boton que carga la ruta del archivo inicial
-buttonConfInicial = Button(root, text="Carga configuración inicial", command=lambda :SolicitaRuta(1),state="disabled")
-window.create_window(200,10, window=buttonConfInicial , anchor=NW)
+buttonConfInicial = Button(root, text="Carga configuración inicial", command=lambda :SolicitaRuta(1),state="disabled",width = 20)
+window.create_window(10,35, window=buttonConfInicial , anchor=NW)
+labelRuta1Auto = Label(root, text="Ruta:",state="disabled")
+window.create_window(200,42, window=labelRuta1Auto , anchor=NW)
 
 #Boton que carga la ruta del archivo final
-buttonConfFinal = Button(root, text="Carga configuración final", command=lambda :SolicitaRuta(2),state="disabled")
-window.create_window(400,10, window=buttonConfFinal , anchor=NW)
+buttonConfFinal = Button(root, text="Carga configuración final", command=lambda :SolicitaRuta(2),state="disabled",width = 20)
+window.create_window(10,65, window=buttonConfFinal , anchor=NW)
+labelRuta2Auto = Label(root, text="Ruta:",state="disabled")
+window.create_window(200,70, window=labelRuta2Auto, anchor=NW)
 
 #Boton que llama a la función generar para realizar operacion para el modo automatico
-buttonSolucionAutomatico = Button(root, text="Generar solución",state="disabled")
-window.create_window(605,10, window=buttonSolucionAutomatico , anchor=NW)
+buttonSolucionAutomatico = Button(root, text="Cargar en torres",state="disabled",width = 20, command=CargaAutomatico)
+window.create_window(10,97, window=buttonSolucionAutomatico , anchor=NW)
+
 #------------------------------------------------------------------------------------------------------------------------------
 muesca1 = 0
 muesca2 = 0
@@ -504,34 +574,40 @@ def MuescaColorManual(torre,ListaObjetos,ListaEstado):
 
 #Boton que carga la ruta del archivo inicial
 buttonMuesca1 = Button(root, text="Muesca 1", command=lambda:MuescaManual(1,ListaObj,ListaEstados1),state="disabled")
-window.create_window(25,110, window=buttonMuesca1 , anchor=NW)
+window.create_window(10,155, window=buttonMuesca1 , anchor=NW)
 
 #Boton que carga la ruta del archivo final
 buttonColorMuesca1 = Button(root, text="Cambiar bola muesca 1", command=lambda:MuescaColorManual(1,ListaObj,ListaEstados1),state="disabled")
-window.create_window(127,110, window=buttonColorMuesca1 , anchor=NW)
+window.create_window(120,155, window=buttonColorMuesca1 , anchor=NW)
+
+labelRuta1Manual = Label(root, text="Estado",state="disabled")
+window.create_window(295,160, window=labelRuta1Manual , anchor=NW)
 
 #Boton que carga la ruta del archivo inicial
 buttonMuesca2 = Button(root, text="Muesca 2", command=lambda:MuescaManual(2,ListaObj2,ListaEstados2),state="disabled")
-window.create_window(325,110, window=buttonMuesca2 , anchor=NW)
+window.create_window(10,190, window=buttonMuesca2 , anchor=NW)
 
 #Boton que carga la ruta del archivo final
 buttonColorMuesca2 = Button(root, text="Cambiar bola muesca 2", command=lambda:MuescaColorManual(2,ListaObj2,ListaEstados2),state="disabled")
-window.create_window(427,110, window=buttonColorMuesca2 , anchor=NW)
+window.create_window(120,190, window=buttonColorMuesca2 , anchor=NW)
+
+labelRuta2Manual = Label(root, text="Estado",state="disabled")
+window.create_window(295,195, window=labelRuta2Manual , anchor=NW)
 
 #Boton que llama a la función generar para realizar operacion para el modo automatico
-buttonSolucionManual = Button(root, text="Generar solución",state="disabled")
-window.create_window(605,110, window=buttonSolucionManual , anchor=NW)
+buttonSolucionManual = Button(root, text="Cargar en torres",state="disabled",width = 20)
+window.create_window(10,222, window=buttonSolucionManual , anchor=NW)
 #------------------------------------------------------------------------------------------------------------------------------
 
 #Se crean los radioButton
 global v
 v = IntVar()
-Rb1 = Radiobutton(window,text="Modo automático", variable = v, value = 1, padx=10,command= ValidaAutomatico)
-Rb2 = Radiobutton(window,text="Modo manual", variable = v, value = 2, padx=10,command= ValidaManual)
+Rb1 = Radiobutton(window,text="Modo automático", variable = v, value = 1,command= ValidaAutomatico)
+Rb2 = Radiobutton(window,text="Modo manual", variable = v, value = 2,command= ValidaManual)
 window.create_window(10,10, window=Rb1 , anchor=NW)
-window.create_window(10,60, window=Rb2 , anchor=NW)
+window.create_window(10,130, window=Rb2 , anchor=NW)
+#Se crean los labels
 #------------------------------------------------------------------------------------------------------------------------------
-
 
 button = Button(root, text="Cambiar a negro!", command=Cambia)
 button.pack()

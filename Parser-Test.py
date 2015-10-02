@@ -5,7 +5,6 @@ from Parser import *
 
 
 test = Parser();
-
 #el primer parametro indica si es la configuracion inicial o la final, el segundo es el archivo de texto
 msg1 = test.parsear('inicial', 'prueba1')
 msg2 = test.parsear('final', 'prueba2')

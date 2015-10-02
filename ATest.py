@@ -174,8 +174,9 @@ def Analisis(resulta):
     print("Desgloce")
     conteo = 0
     while ini:
-        print()
+        print("************************")
         printBeauty(ini.Modelo.matrix)
+        print("************************")
         try:
             print(ini.Move.description)
         except:
@@ -183,7 +184,7 @@ def Analisis(resulta):
         print(ini.G)
         print(ini.H)
         ini = ini.Padre
-        conteo += 1
+        conteo +=1
     print()
     print("LEN")
     print(conteo)
