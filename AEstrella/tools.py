@@ -10,9 +10,9 @@ class Point:
         if not isinstance(other, Point):
             raise TypeError
         x = abs(self.X-other.X)
-        if x == 3:
-            x = 1
         y = abs(self.Y-other.Y)
+        if y == 3:
+            y = 1
         return x+y
 
 

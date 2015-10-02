@@ -139,9 +139,16 @@ level123=Tower(
 ['a','A','v','r'],
 ['a','v','A','r']])
 
+level124=Tower(
+[['n','n','n','e'],
+['a','A','v','r'],
+['a','A','v','r'],
+['a','v','A','r'],
+['a','A','v','r']])
+
 #"""
 
-tt = level1
+tt = level
 
 newNodo = Nodo(tt, None, 0, None)
 finNodo = Nodo(final, None, 0, None)
@@ -158,6 +165,8 @@ printBeauty(result.Modelo.matrix)
 stop = timeit.default_timer()
 
 print (stop - start)
+print(result.G)
+print(result.f())
 #"""
 
 def Analisis(resulta):
@@ -180,4 +189,4 @@ def Analisis(resulta):
     print(conteo)
 
 
-Analisis(result)
+#Analisis(result)

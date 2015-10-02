@@ -1,3 +1,4 @@
+from _ast import UAdd
 import timeit
 
 UPPERC = 5
@@ -83,14 +84,12 @@ def uppercost(target, succ):
     for suc in succ:
         acc = 0
         for i,row in enumerate(suc.Modelo.matrix[1:]):
-            if "".join(row) in target[i]:
+            join = "".join(row)
+            if join in target[i+1]:
                 continue
             else:
-                acc+= 1
+                acc+= (UPPERC-i)
         suc.H+=acc
-
-
-
 
 def sucesores(inicial, modelo_d):
     """ Encuentra los sucesores de un nodo dado y les asigna los valores
@@ -129,14 +128,16 @@ def estrella(inicial, final):
 
         #stop = timeit.default_timer()
         #print (stop - start)
+
         """
         if contar%1000 == 5:
-            print(min_f.H, min_f.G)
+            print(min_f.H, min_f.G, min_f.f())
             print(contar)
             print(len(abiertos))
             #print(len(cerrados))
         """
         contar+=1
+        print("h",min_f.H, "g", min_f.G, min_f.f())
         #printBeauty(min_f.Modelo.matrix)
         #print()
 
@@ -145,9 +146,11 @@ def estrella(inicial, final):
 
         succ = sucesores(min_f, final_d)
         floork(min_f,final,succ)
-        #uppercost(final_r,succ)
+        uppercost(final_r,succ)
         for sucesor in succ:
             if(sucesor.igual(final)):
+                #print("h",min_f.H, "g", min_f.G, min_f.f())
+                #printBeauty(min_f.Modelo.matrix)
                 #print(len(abiertos))
                 #print(len(cerrados))
                 #print(contar)
