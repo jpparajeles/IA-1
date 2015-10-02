@@ -3,7 +3,7 @@ import timeit
 
 UPPERC = 4
 
-MAX_D = 96
+MAX_D = 96*6
 
 __author__ = 'JP'
 E = "e"
@@ -88,7 +88,7 @@ def uppercost(target, succ):
             if join in target[i+1]:
                 continue
             else:
-                acc+= UPPERC -i
+                acc+= UPPERC-i
         suc.H+=acc
 
 def sucesores(inicial, modelo_d):
@@ -100,8 +100,8 @@ def sucesores(inicial, modelo_d):
     """
     ret = []
     for mov in inicial.Modelo.getNextMovements():
-        #newNodo = Nodo(mov.tower, inicial, mov.cost+inicial.G, mov)
-        newNodo = Nodo(mov.tower, inicial, 6+inicial.G, mov)
+        newNodo = Nodo(mov.tower, inicial, mov.cost+inicial.G, mov)
+        #newNodo = Nodo(mov.tower, inicial, 6+inicial.G, mov)
         newNodo.H=h(newNodo.toDict(), modelo_d)
         ret.append(newNodo)
     return ret
@@ -138,7 +138,7 @@ def estrella(inicial, final):
             #print(len(cerrados))
         """
         contar+=1
-        print("h",min_f.H, "g", min_f.G, min_f.f())
+        #print("h",min_f.H, "g", min_f.G, min_f.f())
         #printBeauty(min_f.Modelo.matrix)
         #print()
 
@@ -147,7 +147,7 @@ def estrella(inicial, final):
 
         succ = sucesores(min_f, final_d)
         floork(min_f,final,succ)
-        uppercost(final_r,succ)
+        #uppercost(final_r,succ)
         for sucesor in succ:
             if(sucesor.igual(final)):
                 #print("h",min_f.H, "g", min_f.G, min_f.f())

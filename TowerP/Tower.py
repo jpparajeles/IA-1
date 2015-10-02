@@ -15,6 +15,10 @@ a a A a
 a r v A
 A v r r
 r v A v'''
+
+MIN = 1
+MINR= 4
+
 class Tower:
     def __init__(self,pMatrix):
         self.matrix=pMatrix;
@@ -30,11 +34,11 @@ class Tower:
 
     def getRotations(self,pMoves):
         #el movimiento de la mueca vale menos
-        pMoves.append(Movement(1,Tower(rotateRight(deepcopy(self.matrix),0)),'Mover Muesca Derecha',4,0))
-        pMoves.append(Movement(1,Tower(rotateLeft(deepcopy(self.matrix),0)),'Mover Muesca Izquierda',3,0))
+        pMoves.append(Movement(MIN,Tower(rotateRight(deepcopy(self.matrix),0)),'Mover Muesca Derecha',4,0))
+        pMoves.append(Movement(MIN,Tower(rotateLeft(deepcopy(self.matrix),0)),'Mover Muesca Izquierda',3,0))
         for rowNum in range(1,self.rowLen):
-            pMoves.append(Movement(4,Tower(rotateRight(deepcopy(self.matrix),rowNum)),'Mover Fila '+str(rowNum)+" Derecha",4,rowNum))
-            pMoves.append(Movement(4,Tower(rotateLeft(deepcopy(self.matrix),rowNum)),'Mover Fila '+str(rowNum)+" Izquierda",3,rowNum))
+            pMoves.append(Movement(MINR,Tower(rotateRight(deepcopy(self.matrix),rowNum)),'Mover Fila '+str(rowNum)+" Derecha",4,rowNum))
+            pMoves.append(Movement(MINR,Tower(rotateLeft(deepcopy(self.matrix),rowNum)),'Mover Fila '+str(rowNum)+" Izquierda",3,rowNum))
 
     def setEmptySpace(self):
         #el empty aca lo tengo como 'e' si en el txt cambia tuesta, hay q ver si me lo mandan x parametro
@@ -48,19 +52,19 @@ class Tower:
         rowsCopy=deepcopy(self.matrix)#copia necesaria para no alterar el objeto original
         if(row==0):#mueve bola hacia abajo(xq esta arriba el hueco)
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia arriba',1,col))
+            pMoves.append(Movement(MIN,Tower(rowsCopy),'Mover bola hacia arriba',1,col))
         elif(row==self.rowLen-1):#mueve bola hacia arriba(xq esta abajo e hueco)
             rowsCopy[row][col],rowsCopy[row-1][col]=rowsCopy[row-1][col],rowsCopy[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia abajo',2,col))
+            pMoves.append(Movement(MIN,Tower(rowsCopy),'Mover bola hacia abajo',2,col))
         else:#mueve la bola hacia arriba y hacia abajo
 
             rowsCopy[row][col],rowsCopy[row+1][col]=rowsCopy[row+1][col],rowsCopy[row][col]
-            pMoves.append(Movement(1,Tower(rowsCopy),'Mover bola hacia arriba',1,col))
+            pMoves.append(Movement(MIN,Tower(rowsCopy),'Mover bola hacia arriba',1,col))
 
             if(rowsCopy[row-1][col]!='n'):# si el vacio esta debajo de la muesca
                 rowsCopy2=deepcopy(self.matrix)#se necesita una segunda copia para no alterar la primera
                 rowsCopy2[row][col],rowsCopy2[row-1][col]=rowsCopy2[row-1][col],rowsCopy2[row][col]
-                pMoves.append(Movement(1,Tower(rowsCopy2),'Mover bola hacia abajo',2,col))
+                pMoves.append(Movement(MIN,Tower(rowsCopy2),'Mover bola hacia abajo',2,col))
 
     def getNextMovements(self):
         moves=[]

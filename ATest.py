@@ -148,7 +148,7 @@ level124=Tower(
 
 #"""
 
-tt = level2
+tt = easy
 
 newNodo = Nodo(tt, None, 0, None)
 finNodo = Nodo(final, None, 0, None)
@@ -179,6 +179,7 @@ def Analisis(resulta):
         print("************************")
         try:
             print(ini.Move.description)
+            #print("G",ini.g, "H", ini.H)
         except:
             print("inicial")
         print(ini.G)
