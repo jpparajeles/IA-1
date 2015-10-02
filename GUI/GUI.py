@@ -3,6 +3,8 @@ import time
 import tkinter.filedialog
 import os
 from Parser import *
+import tkinter.scrolledtext as ScrolledText
+
 
 ListaElementos = [["n","n","v","n"],["a","e","A","a"],["a","r","r","A"],["A","A","r","r"],["v","v","v","v"]]
 ListaObj = []
@@ -137,6 +139,8 @@ def CambiaEstado(estado, ListaObjetos,Posiciones,x,y):
             ListaEstados1 = Posiciones
         else:
             ListaEstados2 = Posiciones
+    VerificaManual()
+
 
 
 
@@ -366,13 +370,20 @@ def ValidaAutomatico():
     buttonMuesca1.config(state="disabled")
     buttonColorMuesca2.config(state="disabled")
     buttonMuesca2.config(state="disabled")
-    buttonSolucionManual.config(state="disabled")
     buttonConfInicial.config(state="normal")
     buttonConfFinal.config(state="normal")
-    labelRuta1Auto.config(text="Ruta:", state="normal")
-    labelRuta2Auto.config(text="Ruta:", state="normal")
-    labelRuta1Manual.config(text="Ruta:", state="disabled")
-    labelRuta2Manual.config(text="Ruta:", state="disabled")
+    labelRuta1Auto.config(state="normal")
+    labelRuta1Auto.delete("1.0",END)
+    labelRuta1Auto.insert(END,"Ruta:")
+    labelRuta2Auto.config(state="normal")
+    labelRuta2Auto.delete("1.0",END)
+    labelRuta2Auto.insert(END,"Ruta:")
+    labelRuta1Manual.config(state="disabled")
+    labelRuta1Manual.delete("1.0",END)
+    labelRuta1Manual.insert(END,"Estado")
+    labelRuta2Manual.config(state="disabled")
+    labelRuta2Manual.delete("1.0",END)
+    labelRuta2Manual.insert(END,"Estado")
 
 
 
@@ -394,10 +405,18 @@ def ValidaManual():
     buttonConfInicial.config(state="disabled")
     buttonConfFinal.config(state="disabled")
     buttonSolucionAutomatico.config(state="disabled")
-    labelRuta1Auto.config(text="Ruta:", state="disabled")
-    labelRuta2Auto.config(text="Ruta:", state="disabled")
-    labelRuta1Manual.config(text="Ruta:", state="normal")
-    labelRuta2Manual.config(text="Ruta:", state="normal")
+    labelRuta1Auto.config(state="disabled")
+    labelRuta1Auto.delete("1.0",END)
+    labelRuta1Auto.insert(END,"Ruta:")
+    labelRuta2Auto.config(state="disabled")
+    labelRuta2Auto.delete("1.0",END)
+    labelRuta2Auto.insert(END,"Ruta")
+    labelRuta1Manual.config(state="normal")
+    labelRuta1Manual.delete("1.0",END)
+    labelRuta1Manual.insert(END,"Estado")
+    labelRuta2Manual.config(state="normal")
+    labelRuta2Manual.delete("1.0",END)
+    labelRuta2Manual.insert(END,"Estado")
 
 #MODO AUTOMATICO----------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------
@@ -426,14 +445,21 @@ def VerificaAutomatico():
     msg1 = test.parsear('inicial', dirNameInicial)
     msg2 = test.parsear('final', dirNameFinal)
     if (msg1 == ''):
-        labelRuta1Auto.config(text="Archivo con formato correcto!")
+
+        labelRuta1Auto.delete("1.0",END)
+        labelRuta1Auto.insert(END,"Archivo con formato correcto!")
     else:
-        print ("Errores en config inicial: \n",msg1)
-        labelRuta1Auto.config(text="Error en configuración inicial: "+msg1)
+        #print ("Errores en config inicial: \n",msg1)
+        labelRuta1Auto.delete("1.0",END)
+        labelRuta1Auto.insert(END,"Error en configuración inicial: "+msg1)
     if (msg2 == ''):
-        labelRuta2Auto.config(text="Archivo con formato correcto!")
+        labelRuta2Auto.delete("1.0",END)
+
+        labelRuta2Auto.insert(END,"Archivo con formato correcto!")
     else:
-        labelRuta2Auto.config(text="Error en configuración final: "+msg2)
+        labelRuta2Auto.delete("1.0",END)
+
+        labelRuta2Auto.insert(END,"Error en configuración inicial: "+msg2)
     global listaInicial
     global listaFinal
     listaInicial = test.getPosicionInicial()
@@ -452,14 +478,18 @@ def CargaAutomatico():
 #Boton que carga la ruta del archivo inicial
 buttonConfInicial = Button(root, text="Carga configuración inicial", command=lambda :SolicitaRuta(1),state="disabled",width = 20)
 window.create_window(10,35, window=buttonConfInicial , anchor=NW)
-labelRuta1Auto = Label(root, text="Ruta:",state="disabled")
-window.create_window(200,42, window=labelRuta1Auto , anchor=NW)
+labelRuta1Auto = ScrolledText.ScrolledText(root, width=100,height=1,state="disabled")
+window.create_window(200,35, window=labelRuta1Auto , anchor=NW)
+labelRuta1Auto.delete("1.0",END)
+labelRuta1Auto.insert(END,"Ruta:")
 
 #Boton que carga la ruta del archivo final
 buttonConfFinal = Button(root, text="Carga configuración final", command=lambda :SolicitaRuta(2),state="disabled",width = 20)
 window.create_window(10,65, window=buttonConfFinal , anchor=NW)
-labelRuta2Auto = Label(root, text="Ruta:",state="disabled")
-window.create_window(200,70, window=labelRuta2Auto, anchor=NW)
+labelRuta2Auto = ScrolledText.ScrolledText(root, width=100,height=1,state="disabled")
+window.create_window(200,65, window=labelRuta2Auto, anchor=NW)
+labelRuta2Auto.delete("1.0",END)
+labelRuta2Auto.insert(END,"Ruta:")
 
 #Boton que llama a la función generar para realizar operacion para el modo automatico
 buttonSolucionAutomatico = Button(root, text="Cargar en torres",state="disabled",width = 20, command=CargaAutomatico)
@@ -470,9 +500,38 @@ muesca1 = 0
 muesca2 = 0
 #MODO MANUAL----------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------
+
+def VerificaManual():
+    test = Parser();
+    global ListaEstados1
+    global ListaEstados2
+    #el primer parametro indica si es la configuracion inicial o la final, el segundo es el archivo de texto
+    msg1 = test.ParserMatriz('inicial', ListaEstados1)
+    msg2 = test.ParserMatriz('final', ListaEstados2)
+    if (msg1 == ''):
+        labelRuta1Manual.delete("1.0",END)
+        labelRuta1Manual.insert(END,"Archivo con formato correcto!")
+    else:
+        print ("Errores en config inicial: \n",msg1)
+        labelRuta1Manual.delete("1.0",END)
+        labelRuta1Manual.insert(END,"Error en configuración inicial: "+msg1)
+
+    if (msg2 == ''):
+        labelRuta2Manual.delete("1.0",END)
+        labelRuta2Manual.insert(END,"Archivo con formato correcto!")
+    else:
+        labelRuta2Manual.delete("1.0",END)
+        labelRuta2Manual.insert(END,"Error en configuración inicial: "+msg2)
+    global listaInicial
+    global listaFinal
+    listaInicial = test.getPosicionInicial()
+    listaFinal = test.getPosicionFinal()
+
 def MuescaManual(torre,ListaObjetos,ListaEstado):
     global muesca1
     global muesca2
+    global ListaEstados1
+    global ListaEstados2
     if ( torre == 1 ):
         if (ListaEstado[0][0]!=5):
             labelTower1.config(image = TowerFontB)
@@ -531,11 +590,15 @@ def MuescaManual(torre,ListaObjetos,ListaEstado):
             ListaEstados2[0][3]=5
             ListaEstados2[0][0]=0
             muesca2 = 0
-
+    #print(ListaEstados1)
+    #print(ListaEstados2)
+    VerificaManual()
 
 def MuescaColorManual(torre,ListaObjetos,ListaEstado):
     global muesca1
     global muesca2
+    global ListaEstados1
+    global ListaEstados2
     if (torre == 1):
         if (ListaEstado[0][muesca1]==0):
             ListaObjetos[muesca1].config(image = imageBall_Red)
@@ -571,6 +634,9 @@ def MuescaColorManual(torre,ListaObjetos,ListaEstado):
             ListaObjetos[muesca2].config(image = imageBall_Empty)
             ListaEstado[0][muesca2]=0
         ListaEstados2 = ListaEstado
+    VerificaManual()
+    #print(ListaEstados1)
+    #print(ListaEstados2)
 
 #Boton que carga la ruta del archivo inicial
 buttonMuesca1 = Button(root, text="Muesca 1", command=lambda:MuescaManual(1,ListaObj,ListaEstados1),state="disabled")
@@ -580,8 +646,12 @@ window.create_window(10,155, window=buttonMuesca1 , anchor=NW)
 buttonColorMuesca1 = Button(root, text="Cambiar bola muesca 1", command=lambda:MuescaColorManual(1,ListaObj,ListaEstados1),state="disabled")
 window.create_window(120,155, window=buttonColorMuesca1 , anchor=NW)
 
-labelRuta1Manual = Label(root, text="Estado",state="disabled")
-window.create_window(295,160, window=labelRuta1Manual , anchor=NW)
+labelRuta1Manual = ScrolledText.ScrolledText(root, width=87,height=1,state="disabled")
+window.create_window(295,155, window=labelRuta1Manual , anchor=NW)
+
+#st = ScrolledText.ScrolledText(root, width=50,height=1)
+#window.create_window(10,10, window=st , anchor=NW)
+########################################################st.insert(END,"hola")
 
 #Boton que carga la ruta del archivo inicial
 buttonMuesca2 = Button(root, text="Muesca 2", command=lambda:MuescaManual(2,ListaObj2,ListaEstados2),state="disabled")
@@ -591,13 +661,28 @@ window.create_window(10,190, window=buttonMuesca2 , anchor=NW)
 buttonColorMuesca2 = Button(root, text="Cambiar bola muesca 2", command=lambda:MuescaColorManual(2,ListaObj2,ListaEstados2),state="disabled")
 window.create_window(120,190, window=buttonColorMuesca2 , anchor=NW)
 
-labelRuta2Manual = Label(root, text="Estado",state="disabled")
-window.create_window(295,195, window=labelRuta2Manual , anchor=NW)
+labelRuta2Manual = ScrolledText.ScrolledText(root, width=87,height=1,state="disabled")
+window.create_window(295,190, window=labelRuta2Manual , anchor=NW)
 
-#Boton que llama a la función generar para realizar operacion para el modo automatico
-buttonSolucionManual = Button(root, text="Cargar en torres",state="disabled",width = 20)
-window.create_window(10,222, window=buttonSolucionManual , anchor=NW)
 #------------------------------------------------------------------------------------------------------------------------------
+def wait(message):
+    win = Toplevel(root)
+    win.transient()
+    win.title('Cargando')
+    Label(win, text=message).pack()
+    return win
+
+def Resolver():
+    win = wait('Por favor espera mientras se encuentra una solución a tu problema!')
+
+#    root.after(10000, win.destroy)
+#    win.destroy()
+
+
+#Boton que resuelve la torre
+buttonResolver = Button(root, text="Resolver", command=Resolver)
+window.create_window(10,240, window=buttonResolver , anchor=NW, width=600)
+
 
 #Se crean los radioButton
 global v
@@ -606,14 +691,6 @@ Rb1 = Radiobutton(window,text="Modo automático", variable = v, value = 1,comman
 Rb2 = Radiobutton(window,text="Modo manual", variable = v, value = 2,command= ValidaManual)
 window.create_window(10,10, window=Rb1 , anchor=NW)
 window.create_window(10,130, window=Rb2 , anchor=NW)
-#Se crean los labels
-#------------------------------------------------------------------------------------------------------------------------------
-
-button = Button(root, text="Cambiar a negro!", command=Cambia)
-button.pack()
-
-button1 = Button(root, text="Cambiar a rojo!", command=CambiaN)
-button1.pack()
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Se agregan las dimensiones a la ventana y su localizacion en pantalla
