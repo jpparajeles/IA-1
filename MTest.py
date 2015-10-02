@@ -33,4 +33,5 @@ for elem in result:
 
 
 writer = Writer()
+
 writer.writeSolution(easy,result)

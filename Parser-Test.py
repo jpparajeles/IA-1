@@ -33,6 +33,7 @@ matriz1 = [[5,5,0,5],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]] #eso viene de GUI
 matriz2 = [[4,5,5,5],[1,2,3,4],[1,2,3,0],[1,2,3,4],[1,2,3,4]] #eso viene de GUI
 msg1 = test.ParserMatriz('inicial', matriz1)
 msg2 = test.ParserMatriz('final', matriz2)
+
 if (msg1 == ''):
     print('Sin errores en config inicial\n')
 else:

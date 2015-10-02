@@ -159,6 +159,7 @@ class Parser:
         print (self.posicionLista)
         error = self.validarMatriz()
         if error == '':
+
             if configuracion == 'inicial':
                 self.posicionInicial = copy.deepcopy(self.posicionLista)
                 writer = Writer() #se escribe en el txt file

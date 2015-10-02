@@ -49,7 +49,7 @@ class Writer:
 
         current_time = time.strftime("%m%d%y_%H%M", time.localtime())
         output_name = 'config_%s_%s.txt' % (order,current_time)
-        #print (output_name)
+        #
         output_file = open(output_name, "w")
         output_file.write(text)
 
