@@ -1,22 +1,22 @@
-F1C1=Verde
-F1C2=Rojo
-F1C3=Verde
-F2C1=Azul
+F2C1=Verde
+F2C2=Rojo
+F2C3=Verde
+F3C1=Azul
 
-F1C4=Verde
-F2C2=Azul
-F2C3=Azul
-F2C4=Azul
+F2C4=Verde
+F3C2=Azul
+F3C3=Azul
+F3C4=Azul
 
-C1F3=Amarillo
-F3C2=AmariLLo
-F3C3=Amarillo
-F3C4=Amarillo
+C1F4=Amarillo
+F4C2=AmariLLo
+F4C3=Amarillo
+F4C4=vacio
 
-M5
+F1C4=Amarillo
 
-F4C1=Rojo
-F4C2=Rojo
-F4C3=Verde
-F4C4=Rojo
 
+F5C1=Rojo
+F5C2=Rojo
+F5C3=Verde
+F5C4=Rojo

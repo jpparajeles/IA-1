@@ -141,7 +141,7 @@ level123=Tower(
 
 #"""
 
-tt = level1
+tt = level14
 
 newNodo = Nodo(tt, None, 0, None)
 finNodo = Nodo(final, None, 0, None)

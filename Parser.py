@@ -2,12 +2,10 @@ __author__ = 'ia'
 import re
 import copy
 from operator import itemgetter
-import sys
+from Writer import *
 
 """
-fila(#, {azul, azul, azul, color})
-
-muesca(#col)
+F#C#
 
 """
 
@@ -20,8 +18,8 @@ class Parser:
         self.posicionFinal = []
         self.posiciontemp = []
         self.posicionLista = self.inicializarLista()
-        self.variablesSistema = {'verde':'v', 'rojo':'r', 'amarillo':'a', 'azul':'A'}
-
+        self.variablesSistema = {'verde':'v', 'rojo':'r', 'amarillo':'a', 'azul':'A', 'vacio':'e'}
+        self.variablesGUI = {0:'e', 1:'r',2:'A', 3:'v', 4:'a', 5:'n'}
 
     def inicializarLista(self):
         lista = []
@@ -56,7 +54,7 @@ class Parser:
         self.texto = re.sub(r"[\n]+","\n", self.texto) #quita line breaks extra
         self.texto = re.sub(r"[ ]+","", self.texto)  #quita los espacios extra
         #print(self.texto)
-        matchObj = re.match( r'^(\w+=\w+\n*|M[1-9]\n*|\n)*$', self.texto, re.U)
+        matchObj = re.match( r'^(\w+=\w+\n*|\n)*$', self.texto, re.U)
         self.separarTexto()
         if matchObj:
             return ""
@@ -70,7 +68,7 @@ class Parser:
             listaPosiciones.remove([''])
         for elemento in listaPosiciones:
             temp = elemento[0]
-            matchObj = re.match( r'F[1-4]C[1-4]|C[1-4]F[1-4]$', temp)
+            matchObj = re.match( r'F[1-5]C[1-4]|C[1-4]F[1-5]$', temp)
 
             if len(temp) > 2:
                 elemento[0] = [ temp[:2], temp[2:]  ]
@@ -81,12 +79,12 @@ class Parser:
                 elemento[0].sort(key=itemgetter(0))  #lo ordeno para que siempre quede primero las columnas, aunque en el txt hayan entrado al reves
 
             if not(matchObj): #si no hizo match, hay que revisar si porque corresponde a la muesca. Si con ese caso tampoco calza, definitivamente hay un error
-                matchObj = re.match( r'M[1-4]$', temp)
-                if matchObj:
-                    elemento[0] = ['C'+temp[1],'F0']
-                    elemento.append('muesca')
-                else:
-                    return  ("Hay un error en la linea: '"+temp +"'")
+               # matchObj = re.match( r'M[1-4]$', temp)
+               # if matchObj:
+                #    elemento[0] = ['C'+temp[1],'F0']
+                #    elemento.append('muesca')
+                #else:
+                return  ("Hay un error en la linea: '"+temp +"'")
 
         self.posiciontemp = copy.deepcopy(listaPosiciones)
 
@@ -102,10 +100,10 @@ class Parser:
         for elemento in self.posiciontemp:
             if elemento[2].lower() in self.variablesSistema.keys() :  #aqui se  valida que los colores sean validos
 
-                self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = self.variablesSistema[elemento[2].lower()]
-            elif elemento[2].lower() == 'muesca':
+                self.posicionLista [int(elemento[0])-1] [int(elemento[1])-1] = self.variablesSistema[elemento[2].lower()]
+            #elif elemento[2].lower() == 'muesca':
 
-                self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = 'e'
+             #   self.posicionLista [int(elemento[0])] [int(elemento[1])-1] = 'e'
             else:
                 #print("Uso de palabra no conocida " + elemento[2])
                 return "Uso de la palabra no reconocida por el lenguaje: '" + elemento[2] + "'"
@@ -115,23 +113,23 @@ class Parser:
         error = ''
         #revisar la primera fila
         #debe hacer solo una e, 3 n, y ningun otro color
-        e_fila1 = self.posicionLista[0].count('e')
+       # e_fila1 = self.posicionLista[0].count('e')
         n_fila1 = self.posicionLista[0].count('n')
-        if e_fila1 != 1:
-            error += 'Debe colocar la muesca en una única columna de la parte superior de la torre.\n'
+        #if e_fila1 != 1:
+         #   error += 'Debe colocar la muesca en una única columna de la parte superior de la torre.\n'
         if n_fila1 != 3:
-            error += 'Sólo 3 de las 4 columnas en la parte superior no deben tener elementos asignados.\n'
+            error += 'La primera fila solo puede tener UN elemento asignado\n'
 
         #revisar el resto de la matriz
         #contar cuantos elementos hay de cada uno (incluyendo e y n)
         #para cada elemento, ver si la cantidad corresponde con el correcto (4 de 'A' 'a' 'v' y 'r', 0 de 'e' y 0 de 'n')
-        cant_a = sum(row.count('a') for row in self.posicionLista[1:])
-        cant_A = sum(row.count('A') for row in self.posicionLista[1:])
-        cant_v = sum(row.count('v') for row in self.posicionLista[1:])
-        cant_r = sum(row.count('r') for row in self.posicionLista[1:])
-        e_matriz = sum(row.count('e') for row in self.posicionLista[1:])
+        cant_a = sum(row.count('a') for row in self.posicionLista)
+        cant_A = sum(row.count('A') for row in self.posicionLista)
+        cant_v = sum(row.count('v') for row in self.posicionLista)
+        cant_r = sum(row.count('r') for row in self.posicionLista)
+        e_matriz = sum(row.count('e') for row in self.posicionLista)
         n_matriz = sum(row.count('n') for row in self.posicionLista[1:])
-
+        #print(self.posicionLista)
         if cant_a != 4:
             error += 'Cantidad incorrecta de bolitas de color amarillo.\n'
         if cant_A != 4:
@@ -140,8 +138,8 @@ class Parser:
              error += 'Cantidad incorrecta de bolitas de color verde.\n'
         if cant_r != 4:
             error += 'Cantidad incorrecta de bolitas de color rojo.\n'
-        if e_matriz != 0:
-            error += 'No se debe colocar la muesca abajo.\n'
+        if e_matriz != 1:
+            error += 'La muesca debe ir en una solo y una posición de la torre\n'
         if n_matriz != 0:
             error += 'Hay espacios sin asignar color.\n'
         return error
@@ -152,6 +150,25 @@ class Parser:
     def getPosicionFinal(self):
         return self.posicionFinal
 
+    def ParserMatriz(self, configuracion, matriz):
+        error =''
+        self.posicionLista = self.inicializarLista()
+        for i in range (0,5):
+            for j in range (0,4):
+                self.posicionLista[i][j] = self.variablesGUI[ matriz[i][j] ]
+        print (self.posicionLista)
+        error = self.validarMatriz()
+        if error == '':
+            if configuracion == 'inicial':
+                self.posicionInicial = copy.deepcopy(self.posicionLista)
+                writer = Writer() #se escribe en el txt file
+                writer.writeConfiguracion('inicial', self.posicionInicial)
+
+            elif configuracion == 'final':
+                self.posicionFinal = copy.deepcopy(self.posicionLista)
+                writer = Writer() #se escribe en el txt file
+                writer.writeConfiguracion('final', self.posicionInicial)
+        return error
 
 
     def parsear(self, configuracion, archivo):
