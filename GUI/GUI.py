@@ -4,6 +4,9 @@ import tkinter.filedialog
 import os
 from Parser import *
 import tkinter.scrolledtext as ScrolledText
+from AEstrella.AEstrella import busqueda
+from TowerP.Tower import Tower, printBeauty
+from Writer import *
 
 
 ListaElementos = [["n","n","v","n"],["a","e","A","a"],["a","r","r","A"],["A","A","r","r"],["v","v","v","v"]]
@@ -672,17 +675,62 @@ def wait(message):
     Label(win, text=message).pack()
     return win
 
+result=""
 def Resolver():
+    global contador
+    contador=0
+    global listaInicial
+    global listaFinal
+    global result
     win = wait('Por favor espera mientras se encuentra una solución a tu problema!')
+    inicial=Tower(listaInicial)
+    final=Tower(listaFinal)
 
-#    root.after(10000, win.destroy)
-#    win.destroy()
+    #se debe llamar a esa funcion
+    result = busqueda(inicial,final)
+    writer = Writer()
+    win.destroy()
+    writer.writeSolution(inicial,result)
+    buttonResolver.config(state="disabled")
+    buttonPasos.config(state="normal")
 
+contador=0
+def Pasos():
+    global contador
+    global result
+    global listaInicial
+    global listaFinal
+    if (contador==len(result)):
+        buttonResolver.config(state="disabled")
+    if (contador!=0 and contador<=len(result)):
+        LabelAccion.config(text=(result[contador].description))
+    #LabelAccion.config(text=(result[contador].description))
+    if (contador==0):
+        CargarActual(labelTower1,listaInicial,ListaObj)
+        CargarActual(labelTower2,(result[contador+1].tower.matrix),ListaObj2)
+    else:
+        CargarActual(labelTower1,(result[contador].tower.matrix),ListaObj)
+        if (contador==len(result)):
+            CargarActual(labelTower2,listaFinal,ListaObj2)
+        elif (contador<len(result)):
+            CargarActual(labelTower2,(result[contador+1].tower.matrix),ListaObj2)
+
+    #printBeauty(result[contador].tower.matrix) #deberia ser la funcion para escribir en archivos
+    contador+=1
+    if (contador == len(result)-1):
+        buttonResolver.config(state="normal")
+        buttonPasos.config(state="disabled")
+        contador=0
 
 #Boton que resuelve la torre
 buttonResolver = Button(root, text="Resolver", command=Resolver)
 window.create_window(10,240, window=buttonResolver , anchor=NW, width=600)
+#Boton que resuelve la torre
+buttonPasos = Button(root, text="Siguiente Paso", command=Pasos)
+window.create_window(650,240, window=buttonPasos , anchor=NW, width=300)
 
+LabelAccion = Label(window,text="Accion")
+window.create_window(750,300, window=LabelAccion , anchor=NW)
 
 #Se crean los radioButton
 global v

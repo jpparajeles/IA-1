@@ -4,6 +4,7 @@ from AEstrella.AEstrella import busqueda, h, busquedaT
 from AEstrella.Nodo import Nodo
 from TowerP.Tower import Tower, printBeauty
 import timeit
+
 d=Tower(
 [['n','n','n','e'],
 ['a','a','A','a'],
@@ -171,7 +172,7 @@ print(result.f())
 
 def Analisis(resulta):
     ini = resulta
-    print("Desgloce")
+    print("Desglose")
     conteo = 0
     while ini:
         print("************************")
@@ -191,4 +192,4 @@ def Analisis(resulta):
     print(conteo)
 
 
-#Analisis(result)
+Analisis(result)
