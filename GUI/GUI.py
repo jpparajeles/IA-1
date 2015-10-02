@@ -8,7 +8,6 @@ from AEstrella.AEstrella import busqueda
 from TowerP.Tower import Tower, printBeauty
 from Writer import *
 
-
 ListaElementos = [["n","n","v","n"],["a","e","A","a"],["a","r","r","A"],["A","A","r","r"],["v","v","v","v"]]
 ListaObj = []
 ListaObj2 = []
@@ -434,10 +433,8 @@ def SolicitaRuta(opcion):
     global dirNameInicial
     if (opcion == 1):
         dirNameInicial = tkinter.filedialog.askopenfilename(title = "Configuración inicial",initialdir='./' )
-        print("Ruta de archivo de configuración inicial: " +dirNameInicial)
     else:
         dirNameFinal = tkinter.filedialog.askopenfilename(title = "Configuración final",initialdir='./' )
-        print("Ruta de archivo de configuración final: " +dirNameFinal)
     VerificaAutomatico()
 
 def VerificaAutomatico():
@@ -452,7 +449,6 @@ def VerificaAutomatico():
         labelRuta1Auto.delete("1.0",END)
         labelRuta1Auto.insert(END,"Archivo con formato correcto!")
     else:
-        #print ("Errores en config inicial: \n",msg1)
         labelRuta1Auto.delete("1.0",END)
         labelRuta1Auto.insert(END,"Error en configuración inicial: "+msg1)
     if (msg2 == ''):
@@ -520,7 +516,6 @@ def VerificaManual():
         labelRuta1Manual.delete("1.0",END)
         labelRuta1Manual.insert(END,"Archivo con formato correcto!")
     else:
-        print ("Errores en config inicial: \n",msg1)
         labelRuta1Manual.delete("1.0",END)
         labelRuta1Manual.insert(END,"Error en configuración inicial: "+msg1)
 
@@ -604,8 +599,7 @@ def MuescaManual(torre,ListaObjetos,ListaEstado):
             ListaEstados2[0][3]=5
             ListaEstados2[0][0]=0
             muesca2 = 0
-    #print(ListaEstados1)
-    #print(ListaEstados2)
+
     VerificaManual()
 
 def MuescaColorManual(torre,ListaObjetos,ListaEstado):
@@ -649,8 +643,7 @@ def MuescaColorManual(torre,ListaObjetos,ListaEstado):
             ListaEstado[0][muesca2]=0
         ListaEstados2 = ListaEstado
     VerificaManual()
-    #print(ListaEstados1)
-    #print(ListaEstados2)
+
 
 #Boton que carga la ruta del archivo inicial
 buttonMuesca1 = Button(root, text="Muesca 1", command=lambda:MuescaManual(1,ListaObj,ListaEstados1),state="disabled")
