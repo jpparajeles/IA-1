@@ -18,7 +18,7 @@ ListaEstados2 = [[0,5,5,5],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]]
 
 root = Tk()
 root.title('Torre de Babilonia')
-w = 1000 # El largo de la ventana
+w = 970 # El largo de la ventana
 h = 800 # La altura de la ventana
 
 # Obtener el largo y alto de la ventana
@@ -463,6 +463,11 @@ def VerificaAutomatico():
         labelRuta2Auto.delete("1.0",END)
 
         labelRuta2Auto.insert(END,"Error en configuración inicial: "+msg2)
+    global v
+    if (v.get()==1 and msg1 == "" and msg2 == ""):
+        buttonResolver.config(state="normal")
+    else:
+        buttonResolver.config(state="disabled")
     global listaInicial
     global listaFinal
     listaInicial = test.getPosicionInicial()
@@ -525,6 +530,12 @@ def VerificaManual():
     else:
         labelRuta2Manual.delete("1.0",END)
         labelRuta2Manual.insert(END,"Error en configuración inicial: "+msg2)
+    global v
+    if (v.get()==2 and msg1 == "" and msg2 == ""):
+        buttonResolver.config(state="normal")
+    else:
+        buttonResolver.config(state="disabled")
+
     global listaInicial
     global listaFinal
     listaInicial = test.getPosicionInicial()
@@ -723,14 +734,21 @@ def Pasos():
         contador=0
 
 #Boton que resuelve la torre
-buttonResolver = Button(root, text="Resolver", command=Resolver)
+buttonResolver = Button(root, text="Resolver", command=Resolver,state="disabled")
 window.create_window(10,240, window=buttonResolver , anchor=NW, width=600)
 #Boton que resuelve la torre
-buttonPasos = Button(root, text="Siguiente Paso", command=Pasos)
+buttonPasos = Button(root, text="Siguiente Paso", command=Pasos,state="disabled")
 window.create_window(650,240, window=buttonPasos , anchor=NW, width=300)
 
 LabelAccion = Label(window,text="Accion")
-window.create_window(750,300, window=LabelAccion , anchor=NW)
+window.create_window(650,300, window=LabelAccion , anchor=NW)
+
+
+LabelPasoAnterior = Label(window,text="Paso Anterior")
+window.create_window(20,600, window=LabelPasoAnterior , anchor=NW)
+LabelPasoActual = Label(window,text="Paso Actual")
+window.create_window(320,600, window=LabelPasoActual , anchor=NW)
+
 
 #Se crean los radioButton
 global v
