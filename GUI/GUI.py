@@ -744,9 +744,9 @@ LabelAccion = Label(window,text="Accion")
 window.create_window(650,300, window=LabelAccion , anchor=NW)
 
 
-LabelPasoAnterior = Label(window,text="Paso Anterior")
+LabelPasoAnterior = Label(window,text="Estado Actual")
 window.create_window(20,600, window=LabelPasoAnterior , anchor=NW)
-LabelPasoActual = Label(window,text="Paso Actual")
+LabelPasoActual = Label(window,text="Paso Siguiente")
 window.create_window(320,600, window=LabelPasoActual , anchor=NW)
 
 
