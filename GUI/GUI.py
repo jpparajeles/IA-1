@@ -467,8 +467,6 @@ def MuescaColorManual(torre,ListaObjetos,ListaEstado):
     global muesca1
     global muesca2
     if (torre == 1):
-        print ("Estado 1")
-        print (ListaEstado)
         if (ListaEstado[0][muesca1]==0):
             ListaObjetos[muesca1].config(image = imageBall_Red)
             ListaEstado[0][muesca1]=1
@@ -485,10 +483,8 @@ def MuescaColorManual(torre,ListaObjetos,ListaEstado):
             ListaObjetos[muesca1].config(image = imageBall_Empty)
             ListaEstado[0][muesca1]=0
         ListaEstados1 = ListaEstado
-        print ("Muesca 1:" + str(muesca1))
+
     else:
-        print("Estado 2")
-        print (ListaEstado)
         if (ListaEstado[0][muesca2]==0):
             ListaObjetos[muesca2].config(image = imageBall_Red)
             ListaEstado[0][muesca2]=1
@@ -505,7 +501,6 @@ def MuescaColorManual(torre,ListaObjetos,ListaEstado):
             ListaObjetos[muesca2].config(image = imageBall_Empty)
             ListaEstado[0][muesca2]=0
         ListaEstados2 = ListaEstado
-        print ("Muesca 2:" + str(muesca2))
 
 #Boton que carga la ruta del archivo inicial
 buttonMuesca1 = Button(root, text="Muesca 1", command=lambda:MuescaManual(1,ListaObj,ListaEstados1),state="disabled")
