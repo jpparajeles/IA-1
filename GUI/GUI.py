@@ -1,3 +1,4 @@
+import timeit
 from tkinter import *
 import time
 import tkinter.filedialog
@@ -691,7 +692,11 @@ def Resolver():
     final=Tower(listaFinal)
 
     #se debe llamar a esa funcion
+    start = timeit.default_timer()
     result = busqueda(inicial,final)
+    stop = timeit.default_timer()
+    print (stop - start)
+    print(len(result))
     writer = Writer()
     win.destroy()
     writer.writeSolution(inicial,result)
