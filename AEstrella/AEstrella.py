@@ -1,7 +1,7 @@
 from _ast import UAdd
 import timeit
 
-UPPERC = 5
+UPPERC = 4
 
 MAX_D = 96
 
@@ -88,7 +88,7 @@ def uppercost(target, succ):
             if join in target[i+1]:
                 continue
             else:
-                acc+= (UPPERC-i)
+                acc+= UPPERC -i
         suc.H+=acc
 
 def sucesores(inicial, modelo_d):
@@ -100,7 +100,8 @@ def sucesores(inicial, modelo_d):
     """
     ret = []
     for mov in inicial.Modelo.getNextMovements():
-        newNodo = Nodo(mov.tower, inicial, mov.cost+inicial.G, mov)
+        #newNodo = Nodo(mov.tower, inicial, mov.cost+inicial.G, mov)
+        newNodo = Nodo(mov.tower, inicial, 6+inicial.G, mov)
         newNodo.H=h(newNodo.toDict(), modelo_d)
         ret.append(newNodo)
     return ret
@@ -151,9 +152,9 @@ def estrella(inicial, final):
             if(sucesor.igual(final)):
                 #print("h",min_f.H, "g", min_f.G, min_f.f())
                 #printBeauty(min_f.Modelo.matrix)
-                #print(len(abiertos))
+                print(len(abiertos))
                 #print(len(cerrados))
-                #print(contar)
+                print(contar)
                 return sucesor
             if(cerrados_f.find(sucesor)):
                 continue
